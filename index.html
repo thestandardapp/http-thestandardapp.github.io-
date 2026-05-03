@@ -217,7 +217,7 @@
   </div>
   <!-- Wallpaper image shows automatically -->
   <div id="wallpaperPreview" style="width:100%;margin-bottom:16px;display:none;">
-    <img id="wallpaperImg" style="width:100%;border-radius:16px;border:1px solid #222;display:block;" alt="Your wallpaper">
+    <img id="wallpaperImg" style="width:100%;border-radius:16px;border:1px solid #222;display:block;" alt="Your wallpaper" crossorigin="anonymous">
   </div>
 
   <button id="shareWallpaperBtn" class="download-btn" onclick="shareWallpaper()">⤴ Share Wallpaper</button>
@@ -638,7 +638,6 @@ function shareWallpaper(){
   if(navigator.share&&navigator.canShare({files:[_wallpaperBlob]})){
     navigator.share({
       files:[_wallpaperBlob],
-      title:'The Standard - Lock In The Day',
     }).catch(err=>{
       if(err.name!=='AbortError') showFallback(canvas);
     });
