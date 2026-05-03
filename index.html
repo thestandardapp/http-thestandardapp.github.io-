@@ -104,8 +104,12 @@
   <div class="landing-sub">Set your standard.<br>Meet it daily.<br>365 dots. No excuses.</div>
   <div class="landing-btns" id="landingBtns">
     <button class="btn-primary" onclick="showScreen('setup');initSetup()">Start My Year</button>
-    <button class="btn-secondary" onclick="loadExisting()">I Already Have an Account</button>
+
     <button onclick="resetAll()" style="background:none;border:none;color:#2a2a2a;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:8px;text-decoration:underline">Reset & Start Over</button>
+    <div style="margin-top:16px;padding:14px 16px;background:#111;border:1px solid #1e1e1e;border-radius:14px;text-align:left;">
+      <div style="font-size:11px;color:#4ade80;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600;">Pro tip</div>
+      <div style="font-size:13px;color:#666;line-height:1.6;">Tap <strong style="color:#aaa">Share</strong> → <strong style="color:#aaa">Add to Home Screen</strong> to save this app to your iPhone. Your dots are stored here — don't lose them!</div>
+    </div>
   </div>
 </div>
 
@@ -211,8 +215,13 @@
       <div class="step-text">Lock screen <strong>updates instantly</strong> ✅</div>
     </div>
   </div>
-  <a id="shareWallpaperBtn" class="download-btn" style="display:block;text-align:center;text-decoration:none;cursor:pointer" onclick="shareWallpaper(event)">⤴ Share Wallpaper</a>
-  <button class="done-btn" onclick="showScreen('home')">Done →</button>
+  <!-- Wallpaper image shows automatically -->
+  <div id="wallpaperPreview" style="width:100%;margin-bottom:16px;display:none;">
+    <img id="wallpaperImg" style="width:100%;border-radius:16px;border:1px solid #222;display:block;" alt="Your wallpaper">
+  </div>
+
+  <button id="shareWallpaperBtn" class="download-btn" onclick="shareWallpaper()">⤴ Share Wallpaper</button>
+  <button class="done-btn" onclick="resetConfirmScreen();showScreen('home')">Done →</button>
   <canvas id="wallpaperCanvas" width="1290" height="2796"></canvas>
 </div>
 
@@ -316,16 +325,7 @@ function showScreen(name){
   if(name==='share')renderShare();
 }
 
-function loadExisting(){
-  const code=prompt('Enter your personal code:');
-  if(code){
-    try{
-      const decoded=JSON.parse(atob(code));
-      state={...state,...decoded};
-      saveState();renderHome();showScreen('home');
-    }catch(e){alert('Invalid code.');}
-  }
-}
+
 
 function updateNamePreview(val){
   // Live update the button text as they type
@@ -481,6 +481,21 @@ function setDotColor(color){
   closeEditPopup();
 }
 
+function resetConfirmScreen(){
+  // Hide preview image when leaving confirm screen
+  const preview=document.getElementById('wallpaperPreview');
+  const img=document.getElementById('wallpaperImg');
+  if(preview) preview.style.display='none';
+  if(img) img.src='';
+  _wallpaperBlob=null;
+  const btn=document.getElementById('shareWallpaperBtn');
+  if(btn){
+    btn.textContent='- Preparing wallpaper...';
+    btn.style.opacity='0.6';
+    btn.style.pointerEvents='none';
+  }
+}
+
 function closeEditPopup(){
   document.getElementById('editPopup').style.display='none';
   _editingDotIdx=null;
@@ -584,13 +599,23 @@ function lockInDay(){
 let _wallpaperBlob = null;
 
 function prepareWallpaperBlob(){
-  // Use setTimeout 0 to let canvas render complete before converting
   setTimeout(function(){
     const canvas=document.getElementById('wallpaperCanvas');
+    const dataUrl=canvas.toDataURL('image/png');
+
+    // Show the image automatically on the confirm screen
+    const img=document.getElementById('wallpaperImg');
+    const preview=document.getElementById('wallpaperPreview');
+    if(img&&preview){
+      img.src=dataUrl;
+      preview.style.display='block';
+    }
+
+    // Also prepare the blob for sharing
     canvas.toBlob(function(blob){
       if(blob){
         _wallpaperBlob=new File([blob],'the-standard-wallpaper.png',{type:'image/png'});
-        // Update button to show ready state
+        // Enable share button
         const btn=document.getElementById('shareWallpaperBtn');
         if(btn){
           btn.textContent='⤴ Share Wallpaper';
