@@ -1,5 +1,778 @@
-{
-  "returncode" : 0,
-  "stdout" : "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0\">\n<title>The Standard<\/title>\n<style>\n  @import url('https:\/\/fonts.googleapis.com\/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');\n\n  :root {\n    --green: #4ade80;\n    --red: #f87171;\n    --empty: #1e1e1e;\n    --bg: #0a0a0a;\n    --surface: #111111;\n    --border: #1e1e1e;\n    --text: #ffffff;\n    --muted: #444444;\n  }\n\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n\n  body {\n    background: var(--bg);\n    color: var(--text);\n    font-family: 'DM Sans', sans-serif;\n    min-height: 100vh;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n  }\n\n  \/* ── SCREENS ── *\/\n  .screen { display: none; width: 100%; max-width: 420px; padding: 0 20px 40px; }\n  .screen.active { display: flex; flex-direction: column; }\n\n  \/* ── LANDING ── *\/\n  #screen-landing {\n    min-height: 100vh;\n    justify-content: center;\n    align-items: center;\n    text-align: center;\n    gap: 0;\n  }\n\n  .landing-dots {\n    display: grid;\n    grid-template-columns: repeat(21, 1fr);\n    gap: 4px;\n    margin-bottom: 40px;\n    opacity: 0;\n    animation: fadeUp 0.8s ease forwards 0.2s;\n  }\n\n  .landing-dot {\n    aspect-ratio: 1;\n    border-radius: 50%;\n    background: var(--empty);\n  }\n\n  .landing-title {\n    font-family: 'Space Mono', monospace;\n    font-size: 32px;\n    font-weight: 700;\n    letter-spacing: -1px;\n    margin-bottom: 10px;\n    opacity: 0;\n    animation: fadeUp 0.8s ease forwards 0.4s;\n  }\n\n  .landing-sub {\n    font-size: 15px;\n    color: var(--muted);\n    margin-bottom: 48px;\n    line-height: 1.6;\n    opacity: 0;\n    animation: fadeUp 0.8s ease forwards 0.5s;\n  }\n\n  .landing-btns {\n    display: flex;\n    flex-direction: column;\n    gap: 12px;\n    width: 100%;\n    opacity: 0;\n    animation: fadeUp 0.8s ease forwards 0.6s;\n  }\n\n  \/* ── SETUP ── *\/\n  #screen-setup { padding-top: 60px; gap: 24px; }\n\n  .setup-header { margin-bottom: 8px; }\n  .setup-title {\n    font-family: 'Space Mono', monospace;\n    font-size: 22px;\n    font-weight: 700;\n    margin-bottom: 6px;\n  }\n  .setup-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }\n\n  .goals-list { display: flex; flex-direction: column; gap: 10px; }\n\n  .goal-row {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 14px;\n    padding: 12px 14px;\n  }\n\n  .goal-emoji-btn {\n    font-size: 20px;\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 2px;\n    border-radius: 8px;\n    transition: background 0.2s;\n  }\n  .goal-emoji-btn:hover { background: #222; }\n\n  .goal-input {\n    flex: 1;\n    background: none;\n    border: none;\n    color: var(--text);\n    font-family: 'DM Sans', sans-serif;\n    font-size: 15px;\n    outline: none;\n  }\n  .goal-input::placeholder { color: var(--muted); }\n\n  .goal-delete {\n    background: none;\n    border: none;\n    color: var(--muted);\n    cursor: pointer;\n    font-size: 18px;\n    padding: 2px 6px;\n    border-radius: 6px;\n    transition: color 0.2s;\n  }\n  .goal-delete:hover { color: var(--red); }\n\n  .add-goal-btn {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    background: none;\n    border: 1px dashed #2a2a2a;\n    border-radius: 14px;\n    padding: 12px 14px;\n    color: var(--muted);\n    font-family: 'DM Sans', sans-serif;\n    font-size: 14px;\n    cursor: pointer;\n    transition: all 0.2s;\n    width: 100%;\n  }\n  .add-goal-btn:hover { border-color: #444; color: #888; }\n\n  \/* ── HOME ── *\/\n  #screen-home { padding-top: 50px; gap: 16px; }\n\n  .home-header {\n    display: flex;\n    justify-content: space-between;\n    align-items: flex-start;\n  }\n\n  .home-date {\n    font-size: 12px;\n    color: var(--muted);\n    letter-spacing: 0.1em;\n    text-transform: uppercase;\n    margin-bottom: 3px;\n  }\n\n  .home-title {\n    font-family: 'Space Mono', monospace;\n    font-size: 20px;\n    font-weight: 700;\n  }\n\n  .settings-btn {\n    background: none;\n    border: 1px solid var(--border);\n    border-radius: 10px;\n    color: var(--muted);\n    padding: 6px 10px;\n    cursor: pointer;\n    font-size: 16px;\n    transition: all 0.2s;\n  }\n  .settings-btn:hover { border-color: #333; color: #888; }\n\n  \/* Dot grid card *\/\n  .grid-card {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 20px;\n    padding: 16px;\n  }\n\n  .dot-grid {\n    display: grid;\n    grid-template-columns: repeat(21, 1fr);\n    gap: 4px;\n    margin-bottom: 14px;\n  }\n\n  .dot {\n    aspect-ratio: 1;\n    border-radius: 50%;\n    background: var(--empty);\n    transition: all 0.3s ease;\n  }\n  .dot.green { background: var(--green); }\n  .dot.red { background: var(--red); }\n  .dot.today {\n    box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px #ffffff44;\n    transform: scale(1.15);\n  }\n  .dot.today.green { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--green); }\n  .dot.today.red { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--red); }\n\n  .stats-row {\n    display: grid;\n    grid-template-columns: repeat(4, 1fr);\n    gap: 8px;\n  }\n\n  .stat {\n    text-align: center;\n    background: #0d0d0d;\n    border-radius: 10px;\n    padding: 8px 4px;\n  }\n  .stat-val { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; }\n  .stat-val.green { color: var(--green); }\n  .stat-val.red { color: var(--red); }\n  .stat-val.streak { color: #facc15; }\n  .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }\n\n  \/* Goals checklist *\/\n  .section-label {\n    font-size: 11px;\n    color: var(--muted);\n    letter-spacing: 0.12em;\n    text-transform: uppercase;\n    font-weight: 600;\n    margin-bottom: 2px;\n  }\n\n  .checklist { display: flex; flex-direction: column; gap: 8px; }\n\n  .check-item {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 14px 16px;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 14px;\n    cursor: pointer;\n    transition: all 0.2s ease;\n    user-select: none;\n  }\n  .check-item.done {\n    background: rgba(74,222,128,0.06);\n    border-color: rgba(74,222,128,0.2);\n  }\n\n  .check-circle {\n    width: 22px; height: 22px;\n    border-radius: 50%;\n    border: 2px solid #333;\n    display: flex; align-items: center; justify-content: center;\n    flex-shrink: 0;\n    transition: all 0.2s ease;\n  }\n  .check-item.done .check-circle {\n    background: var(--green);\n    border-color: var(--green);\n  }\n\n  .check-emoji { font-size: 16px; }\n  .check-label {\n    font-size: 15px;\n    color: #ccc;\n    flex: 1;\n    transition: color 0.2s;\n  }\n  .check-item.done .check-label { color: var(--green); }\n\n  \/* Progress bar *\/\n  .progress-wrap { margin-top: 4px; }\n  .progress-bar {\n    height: 2px;\n    background: #1a1a1a;\n    border-radius: 2px;\n    overflow: hidden;\n    margin-bottom: 14px;\n  }\n  .progress-fill {\n    height: 100%;\n    background: var(--green);\n    border-radius: 2px;\n    transition: width 0.4s ease;\n  }\n\n  \/* Lock in button *\/\n  .lock-btn {\n    width: 100%;\n    padding: 17px;\n    border-radius: 18px;\n    border: none;\n    font-family: 'DM Sans', sans-serif;\n    font-size: 16px;\n    font-weight: 700;\n    cursor: pointer;\n    transition: all 0.3s ease;\n    letter-spacing: -0.2px;\n  }\n  .lock-btn.all-done {\n    background: linear-gradient(135deg, #4ade80, #22c55e);\n    color: #000;\n    box-shadow: 0 8px 24px rgba(74,222,128,0.25);\n  }\n  .lock-btn.not-done {\n    background: linear-gradient(135deg, #f87171, #ef4444);\n    color: #000;\n    box-shadow: 0 8px 24px rgba(248,113,113,0.2);\n  }\n  .lock-hint {\n    text-align: center;\n    font-size: 11px;\n    color: var(--muted);\n    margin-top: 8px;\n  }\n\n  \/* ── CONFIRM SCREEN ── *\/\n  #screen-confirm {\n    min-height: 100vh;\n    justify-content: center;\n    align-items: center;\n    text-align: center;\n    gap: 0;\n  }\n\n  .confirm-dot {\n    width: 96px; height: 96px;\n    border-radius: 50%;\n    margin: 0 auto 28px;\n    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;\n  }\n  .confirm-dot.green {\n    background: radial-gradient(circle at 35% 35%, #86efac, #16a34a);\n    box-shadow: 0 0 40px rgba(74,222,128,0.4), 0 0 80px rgba(74,222,128,0.15);\n  }\n  .confirm-dot.red {\n    background: radial-gradient(circle at 35% 35%, #fca5a5, #dc2626);\n    box-shadow: 0 0 40px rgba(248,113,113,0.4), 0 0 80px rgba(248,113,113,0.15);\n  }\n\n  .confirm-title {\n    font-family: 'Space Mono', monospace;\n    font-size: 24px;\n    font-weight: 700;\n    margin-bottom: 8px;\n  }\n  .confirm-sub {\n    font-size: 15px;\n    margin-bottom: 6px;\n    font-weight: 500;\n  }\n  .confirm-sub.green { color: var(--green); }\n  .confirm-sub.red { color: var(--red); }\n\n  .confirm-note {\n    font-size: 12px;\n    color: var(--muted);\n    margin-bottom: 40px;\n  }\n\n  \/* Wallpaper instructions box *\/\n  .wallpaper-box {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 16px;\n    padding: 20px;\n    width: 100%;\n    text-align: left;\n    margin-bottom: 24px;\n  }\n  .wallpaper-box-title {\n    font-size: 12px;\n    color: var(--muted);\n    letter-spacing: 0.1em;\n    text-transform: uppercase;\n    margin-bottom: 14px;\n  }\n  .wallpaper-step {\n    display: flex;\n    gap: 12px;\n    align-items: flex-start;\n    margin-bottom: 12px;\n  }\n  .wallpaper-step:last-child { margin-bottom: 0; }\n  .step-num {\n    width: 22px; height: 22px;\n    border-radius: 50%;\n    background: #1a1a1a;\n    border: 1px solid #2a2a2a;\n    display: flex; align-items: center; justify-content: center;\n    font-size: 11px;\n    font-family: 'Space Mono', monospace;\n    flex-shrink: 0;\n    color: #888;\n  }\n  .step-text { font-size: 13px; color: #aaa; line-height: 1.5; padding-top: 2px; }\n  .step-text strong { color: var(--text); }\n\n  \/* Wallpaper preview canvas *\/\n  #wallpaperCanvas { display: none; }\n\n  .download-btn {\n    width: 100%;\n    padding: 15px;\n    border-radius: 16px;\n    border: 1px solid #2a2a2a;\n    background: #1a1a1a;\n    color: #ccc;\n    font-family: 'DM Sans', sans-serif;\n    font-size: 15px;\n    font-weight: 600;\n    cursor: pointer;\n    transition: all 0.2s;\n    margin-bottom: 12px;\n  }\n  .download-btn:hover { background: #222; border-color: #333; }\n\n  .done-btn {\n    background: none;\n    border: none;\n    color: var(--muted);\n    font-family: 'DM Sans', sans-serif;\n    font-size: 14px;\n    cursor: pointer;\n    padding: 10px;\n  }\n\n  \/* ── SHARE SCREEN ── *\/\n  #screen-share { padding-top: 60px; gap: 20px; }\n\n  .share-title {\n    font-family: 'Space Mono', monospace;\n    font-size: 22px;\n    font-weight: 700;\n    margin-bottom: 4px;\n  }\n  .share-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }\n\n  .url-box {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 14px;\n    padding: 14px 16px;\n    display: flex;\n    align-items: center;\n    gap: 10px;\n  }\n  .url-text {\n    flex: 1;\n    font-family: 'Space Mono', monospace;\n    font-size: 11px;\n    color: var(--green);\n    word-break: break-all;\n    line-height: 1.4;\n  }\n  .copy-btn {\n    background: #1a1a1a;\n    border: 1px solid #2a2a2a;\n    border-radius: 8px;\n    color: #888;\n    font-size: 12px;\n    padding: 6px 10px;\n    cursor: pointer;\n    font-family: 'DM Sans', sans-serif;\n    white-space: nowrap;\n    transition: all 0.2s;\n  }\n  .copy-btn:hover { background: #222; color: #ccc; }\n\n  .info-box {\n    background: rgba(74,222,128,0.05);\n    border: 1px solid rgba(74,222,128,0.15);\n    border-radius: 14px;\n    padding: 16px;\n    font-size: 13px;\n    color: #aaa;\n    line-height: 1.6;\n  }\n  .info-box strong { color: var(--green); }\n\n  \/* ── SHARED VIEW ── *\/\n  #screen-shared { padding-top: 50px; gap: 16px; }\n\n  \/* ── BUTTONS ── *\/\n  .btn-primary {\n    width: 100%;\n    padding: 16px;\n    border-radius: 18px;\n    border: none;\n    background: var(--green);\n    color: #000;\n    font-family: 'DM Sans', sans-serif;\n    font-size: 16px;\n    font-weight: 700;\n    cursor: pointer;\n    transition: all 0.2s;\n  }\n  .btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }\n\n  .btn-secondary {\n    width: 100%;\n    padding: 15px;\n    border-radius: 18px;\n    border: 1px solid var(--border);\n    background: var(--surface);\n    color: #888;\n    font-family: 'DM Sans', sans-serif;\n    font-size: 15px;\n    font-weight: 500;\n    cursor: pointer;\n    transition: all 0.2s;\n  }\n  .btn-secondary:hover { border-color: #333; color: #aaa; }\n\n  \/* ── ANIMATIONS ── *\/\n  @keyframes fadeUp {\n    from { opacity: 0; transform: translateY(16px); }\n    to { opacity: 1; transform: translateY(0); }\n  }\n  @keyframes popIn {\n    from { opacity: 0; transform: scale(0.5); }\n    to { opacity: 1; transform: scale(1); }\n  }\n\n  \/* Divider *\/\n  .divider { height: 1px; background: var(--border); }\n\n  \/* Today locked badge *\/\n  .locked-badge {\n    display: inline-flex;\n    align-items: center;\n    gap: 6px;\n    background: rgba(74,222,128,0.1);\n    border: 1px solid rgba(74,222,128,0.2);\n    border-radius: 20px;\n    padding: 4px 12px;\n    font-size: 12px;\n    color: var(--green);\n    font-weight: 500;\n  }\n  .locked-badge.red-badge {\n    background: rgba(248,113,113,0.1);\n    border-color: rgba(248,113,113,0.2);\n    color: var(--red);\n  }\n\n  canvas { display: none; }\n<\/style>\n<\/head>\n<body>\n\n<!-- ═══════════════════════════════════════\n     SCREEN: LANDING\n═══════════════════════════════════════ -->\n<div id=\"screen-landing\" class=\"screen active\">\n  <div class=\"landing-dots\" id=\"landingDots\"><\/div>\n  <div class=\"landing-title\">THE STANDARD<\/div>\n  <div class=\"landing-sub\">Set your standard.<br>Meet it daily.<br>365 dots. No excuses.<\/div>\n  <div class=\"landing-btns\" id=\"landingBtns\">\n    <button class=\"btn-primary\" onclick=\"showScreen('setup'); initSetup();\">Start My Year<\/button>\n    <button class=\"btn-secondary\" onclick=\"loadExisting()\">I Already Have an Account<\/button>\n    <button onclick=\"resetAll()\" style=\"background:none;border:none;color:#2a2a2a;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:8px;margin-top:4px;text-decoration:underline;\">Reset & Start Over<\/button>\n  <\/div>\n<\/div>\n\n<!-- ═══════════════════════════════════════\n     SCREEN: SETUP\n═══════════════════════════════════════ -->\n<div id=\"screen-setup\" class=\"screen\">\n  <div class=\"setup-header\">\n    <div class=\"setup-title\">What's your standard?<\/div>\n    <div class=\"setup-sub\">Add up to 5 daily goals. Complete all of them and you earn a 🟢 green dot.<\/div>\n  <\/div>\n\n  <div class=\"goals-list\" id=\"goalsList\"><\/div>\n\n  <button class=\"add-goal-btn\" id=\"addGoalBtn\" onclick=\"addGoal()\">\n    <span>＋<\/span> Add a goal\n  <\/button>\n\n  <div class=\"divider\"><\/div>\n\n  <div>\n    <div class=\"section-label\" style=\"margin-bottom:10px\">Your name<\/div>\n    <div class=\"goal-row\">\n      <input class=\"goal-input\" id=\"userName\" placeholder=\"e.g. Chad\" maxlength=\"20\">\n    <\/div>\n  <\/div>\n\n  <button class=\"btn-primary\" onclick=\"finishSetup()\">Set My Standard →<\/button>\n  <button class=\"btn-secondary\" onclick=\"showScreen('landing')\">← Back<\/button>\n<\/div>\n\n<!-- ═══════════════════════════════════════\n     SCREEN: HOME\n═══════════════════════════════════════ -->\n<div id=\"screen-home\" class=\"screen\">\n  <div class=\"home-header\">\n    <div>\n      <div class=\"home-date\" id=\"homeDate\"><\/div>\n      <div class=\"home-title\">THE STANDARD<\/div>\n    <\/div>\n    <button class=\"settings-btn\" onclick=\"showScreen('share')\">⤴ Share<\/button>\n    <button class=\"settings-btn\" onclick=\"resetAll()\" style=\"margin-left:8px;color:#444;\">↺<\/button>\n  <\/div>\n\n  <!-- Dot grid -->\n  <div class=\"grid-card\">\n    <div class=\"dot-grid\" id=\"dotGrid\"><\/div>\n    <div class=\"stats-row\">\n      <div class=\"stat\">\n        <div class=\"stat-val green\" id=\"statGreen\">0<\/div>\n        <div class=\"stat-label\">Green<\/div>\n      <\/div>\n      <div class=\"stat\">\n        <div class=\"stat-val red\" id=\"statRed\">0<\/div>\n        <div class=\"stat-label\">Red<\/div>\n      <\/div>\n      <div class=\"stat\">\n        <div class=\"stat-val\" id=\"statLeft\" style=\"color:#888\">0<\/div>\n        <div class=\"stat-label\">Left<\/div>\n      <\/div>\n      <div class=\"stat\">\n        <div class=\"stat-val streak\" id=\"statStreak\">0🔥<\/div>\n        <div class=\"stat-label\">Streak<\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Today's goals -->\n  <div>\n    <div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:10px\">\n      <div class=\"section-label\">Today's Goals<\/div>\n      <div id=\"goalCount\" style=\"font-size:12px;color:var(--muted);font-weight:600\"><\/div>\n    <\/div>\n    <div class=\"checklist\" id=\"checklist\"><\/div>\n  <\/div>\n\n  <!-- Lock in -->\n  <div class=\"progress-wrap\">\n    <div class=\"progress-bar\">\n      <div class=\"progress-fill\" id=\"progressFill\" style=\"width:0%\"><\/div>\n    <\/div>\n    <button class=\"lock-btn not-done\" id=\"lockBtn\" onclick=\"lockInDay()\">🔒 Lock In The Day<\/button>\n    <div class=\"lock-hint\" id=\"lockHint\">Complete all goals for a 🟢 green dot<\/div>\n  <\/div>\n\n  <div id=\"todayLockedBadge\" style=\"display:none;text-align:center\"><\/div>\n<\/div>\n\n<!-- ═══════════════════════════════════════\n     SCREEN: CONFIRM\n═══════════════════════════════════════ -->\n<div id=\"screen-confirm\" class=\"screen\">\n  <div class=\"confirm-dot\" id=\"confirmDot\"><\/div>\n  <div class=\"confirm-title\" id=\"confirmTitle\"><\/div>\n  <div class=\"confirm-sub\" id=\"confirmSub\"><\/div>\n  <div class=\"confirm-note\" id=\"confirmNote\">Updating your wallpaper... ↓<\/div>\n\n  <div class=\"wallpaper-box\">\n    <div class=\"wallpaper-box-title\">Save your wallpaper<\/div>\n    <div class=\"wallpaper-step\">\n      <div class=\"step-num\">1<\/div>\n      <div class=\"step-text\">Tap <strong>\"Download Wallpaper\"<\/strong> below to save your dot grid image to Photos<\/div>\n    <\/div>\n    <div class=\"wallpaper-step\">\n      <div class=\"step-num\">2<\/div>\n      <div class=\"step-text\">Go to <strong>Settings → Wallpaper → Choose New<\/strong> and select the image from Photos<\/div>\n    <\/div>\n    <div class=\"wallpaper-step\">\n      <div class=\"step-num\">3<\/div>\n      <div class=\"step-text\">Set it as your <strong>Lock Screen<\/strong> only<\/div>\n    <\/div>\n  <\/div>\n\n  <button class=\"download-btn\" onclick=\"downloadWallpaper()\">⬇ Download Wallpaper<\/button>\n  <button class=\"done-btn\" onclick=\"showScreen('home')\">Done →<\/button>\n\n  <canvas id=\"wallpaperCanvas\" width=\"1290\" height=\"2796\"><\/canvas>\n<\/div>\n\n<!-- ═══════════════════════════════════════\n     SCREEN: SHARE\n═══════════════════════════════════════ -->\n<div id=\"screen-share\" class=\"screen\">\n  <div>\n    <div class=\"share-title\">Share The Standard<\/div>\n    <div class=\"share-sub\">Send this link to friends and family. They get their own dot grid, their own goals, their own year.<\/div>\n  <\/div>\n\n  <div>\n    <div class=\"section-label\" style=\"margin-bottom:10px\">Your personal link<\/div>\n    <div class=\"url-box\">\n      <div class=\"url-text\" id=\"shareUrl\"><\/div>\n      <button class=\"copy-btn\" onclick=\"copyUrl()\">Copy<\/button>\n    <\/div>\n  <\/div>\n\n  <div class=\"info-box\">\n    <strong>How it works:<\/strong> This link contains your dot data. Anyone with the link can see your progress. Share it with people you trust — it keeps you accountable.\n  <\/div>\n\n  <div>\n    <div class=\"section-label\" style=\"margin-bottom:10px\">Invite someone new<\/div>\n    <div class=\"url-box\">\n      <div class=\"url-text\" id=\"inviteUrl\"><\/div>\n      <button class=\"copy-btn\" onclick=\"copyInvite()\">Copy<\/button>\n    <\/div>\n    <div style=\"font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5\">\n      Send this to someone who wants to start their own year. They set up their own goals from scratch.\n    <\/div>\n  <\/div>\n\n  <button class=\"btn-secondary\" onclick=\"showScreen('home')\">← Back<\/button>\n<\/div>\n\n<canvas id=\"mainCanvas\" width=\"1290\" height=\"2796\" style=\"display:none\"><\/canvas>\n\n<script>\n\/\/ ══════════════════════════════════════════\n\/\/ STATE\n\/\/ ══════════════════════════════════════════\nlet state = {\n  name: '',\n  goals: [],\n  dots: [], \/\/ array of 365: null | 'green' | 'red'\n  startDate: '2025-01-01',\n  checked: {},\n  todayLocked: false,\n  todayResult: null,\n};\n\nconst STORAGE_KEY = 'thestandard_v1';\nconst START_DATE = new Date('2025-01-01');\n\n\/\/ ══════════════════════════════════════════\n\/\/ INIT\n\/\/ ══════════════════════════════════════════\nwindow.addEventListener('load', () => {\n  \/\/ Check URL for shared data\n  const params = new URLSearchParams(window.location.search);\n  const encoded = params.get('d');\n\n  if (encoded) {\n    try {\n      const decoded = JSON.parse(atob(encoded));\n      state = { ...state, ...decoded };\n      \/\/ Reset today's check state\n      const todayIdx = getTodayIndex();\n      state.todayLocked = state.dots[todayIdx] !== null && state.dots[todayIdx] !== undefined;\n      state.todayResult = state.dots[todayIdx] || null;\n      state.checked = {};\n      state.goals.forEach(g => state.checked[g.id] = false);\n      saveState();\n      renderHome();\n      showScreen('home');\n      return;\n    } catch(e) {}\n  }\n\n  \/\/ Always land on landing screen — add Continue button if saved data exists\n  animateLandingDots();\n  initSetup();\n\n  const saved = localStorage.getItem(STORAGE_KEY);\n  if (saved) {\n    try {\n      const parsed = JSON.parse(saved);\n      if (parsed && parsed.goals && parsed.goals.length > 0) {\n        const btns = document.getElementById('landingBtns');\n        const continueBtn = document.createElement('button');\n        continueBtn.className = 'btn-primary';\n        continueBtn.style.marginBottom = '0';\n        continueBtn.textContent = '▶ Continue as ' + (parsed.name || 'You');\n        continueBtn.onclick = function() {\n          state = parsed;\n          const todayIdx = getTodayIndex();\n          state.todayLocked = state.dots[todayIdx] !== null && state.dots[todayIdx] !== undefined;\n          state.todayResult = state.dots[todayIdx] || null;\n          renderHome();\n          showScreen('home');\n        };\n        btns.insertBefore(continueBtn, btns.firstChild);\n      }\n    } catch(e) {}\n  }\n\n  showScreen('landing');\n});\n\nfunction animateLandingDots() {\n  const container = document.getElementById('landingDots');\n  const colors = ['green','red','empty'];\n  for (let i = 0; i < 63; i++) {\n    const d = document.createElement('div');\n    d.className = 'landing-dot';\n    const r = Math.random();\n    if (r < 0.3) d.style.background = '#4ade80';\n    else if (r < 0.55) d.style.background = '#f87171';\n    setTimeout(() => { container.appendChild(d); }, i * 20);\n  }\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ SCREENS\n\/\/ ══════════════════════════════════════════\nfunction showScreen(name) {\n  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));\n  document.getElementById('screen-' + name).classList.add('active');\n  if (name === 'share') renderShare();\n}\n\nfunction loadExisting() {\n  const code = prompt('Enter your personal code (from a previous session):');\n  if (code) {\n    try {\n      const decoded = JSON.parse(atob(code));\n      state = { ...state, ...decoded };\n      saveState();\n      renderHome();\n      showScreen('home');\n    } catch(e) {\n      alert('Invalid code. Please try again.');\n    }\n  }\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ SETUP\n\/\/ ══════════════════════════════════════════\nlet goalIdCounter = 1;\nconst DEFAULT_GOALS = [\n  { id: 1, emoji: '💪', text: '20 min exercise' }\n];\n\nfunction initSetup() {\n  state.goals = [];\n  const list = document.getElementById('goalsList');\n  list.innerHTML = '';\n  DEFAULT_GOALS.forEach(g => addGoalRow(g.emoji, g.text));\n}\n\nfunction addGoal() {\n  if (state.goals.length >= 5) return;\n  addGoalRow('🎯', '');\n}\n\nfunction addGoalRow(emoji, text) {\n  if (state.goals.length >= 5) {\n    document.getElementById('addGoalBtn').style.opacity = '0.3';\n    document.getElementById('addGoalBtn').disabled = true;\n    return;\n  }\n  const id = goalIdCounter++;\n  state.goals.push({ id, emoji, text });\n\n  const row = document.createElement('div');\n  row.className = 'goal-row';\n  row.id = 'goal-row-' + id;\n  row.innerHTML = `\n    <button class=\"goal-emoji-btn\" onclick=\"pickEmoji(${id})\" id=\"emoji-${id}\">${emoji}<\/button>\n    <input class=\"goal-input\" placeholder=\"Your goal...\" value=\"${text}\"\n      oninput=\"updateGoalText(${id}, this.value)\" id=\"goaltext-${id}\">\n    <button class=\"goal-delete\" onclick=\"deleteGoal(${id})\">×<\/button>\n  `;\n  document.getElementById('goalsList').appendChild(row);\n\n  if (state.goals.length >= 5) {\n    document.getElementById('addGoalBtn').style.opacity = '0.3';\n    document.getElementById('addGoalBtn').disabled = true;\n  }\n}\n\nfunction updateGoalText(id, val) {\n  const g = state.goals.find(g => g.id === id);\n  if (g) g.text = val;\n}\n\nfunction deleteGoal(id) {\n  state.goals = state.goals.filter(g => g.id !== id);\n  document.getElementById('goal-row-' + id)?.remove();\n  document.getElementById('addGoalBtn').style.opacity = '1';\n  document.getElementById('addGoalBtn').disabled = false;\n}\n\nconst EMOJIS = ['💪','🏃','📚','🚫','💧','😴','🧘','🥗','✍️','🎯','🏋️','🚴','🧠','❤️','💊'];\nfunction pickEmoji(id) {\n  const emoji = prompt('Pick an emoji (paste or type one):', document.getElementById('emoji-' + id).textContent);\n  if (emoji) {\n    document.getElementById('emoji-' + id).textContent = emoji;\n    const g = state.goals.find(g => g.id === id);\n    if (g) g.emoji = emoji;\n  }\n}\n\nfunction finishSetup() {\n  const name = document.getElementById('userName').value.trim() || 'You';\n  state.goals.forEach(g => {\n    const el = document.getElementById('goaltext-' + g.id);\n    if (el) g.text = el.value.trim() || g.text;\n  });\n\n  if (state.goals.length === 0) {\n    alert('Add at least one goal!');\n    return;\n  }\n  if (state.goals.some(g => !g.text)) {\n    alert('Please fill in all your goals.');\n    return;\n  }\n\n  state.name = name;\n  state.dots = new Array(365).fill(null);\n  state.checked = {};\n  state.goals.forEach(g => state.checked[g.id] = false);\n  state.todayLocked = false;\n  state.todayResult = null;\n\n  \/\/ Set start date to Jan 1 of current year for new users\n  \/\/ For Chad, use 2025 since his history starts Jan 1 2025\n  if (name.toLowerCase() === 'chad') {\n    state.startDate = '2026-01-01';\n    loadChadHistory();\n  } else {\n    const now = new Date();\n    state.startDate = now.getFullYear() + '-01-01';\n  }\n\n  saveState();\n  renderHome();\n  showScreen('home');\n}\n\nfunction loadChadHistory() {\n  \/\/ 117 days: 49 green, 68 red — realistic pattern\n  const pattern = [];\n  let greens = 49, reds = 68;\n  for (let i = 0; i < 117; i++) {\n    const remaining = 117 - i;\n    const greenProb = greens \/ remaining;\n    if (Math.random() < greenProb && greens > 0) {\n      pattern.push('green'); greens--;\n    } else {\n      pattern.push('red'); reds--;\n    }\n  }\n  for (let i = 0; i < 117; i++) {\n    state.dots[i] = pattern[i];\n  }\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ HOME\n\/\/ ══════════════════════════════════════════\nfunction getTodayIndex() {\n  \/\/ Use the user's start date stored in state, not a hardcoded constant\n  const today = new Date();\n  today.setHours(0,0,0,0);\n  const startStr = state.startDate || '2025-01-01';\n  const start = new Date(startStr);\n  start.setHours(0,0,0,0);\n  const diff = Math.floor((today - start) \/ (1000*60*60*24));\n  return Math.max(0, Math.min(364, diff));\n}\n\nfunction renderHome() {\n  \/\/ Date\n  const today = new Date();\n  document.getElementById('homeDate').textContent = today.toLocaleDateString('en-ZA', {\n    weekday:'long', day:'numeric', month:'long'\n  }).toUpperCase();\n\n  renderDotGrid();\n  renderStats();\n  renderChecklist();\n  renderLockBtn();\n}\n\nfunction renderDotGrid() {\n  const grid = document.getElementById('dotGrid');\n  grid.innerHTML = '';\n  const todayIdx = getTodayIndex();\n\n  for (let i = 0; i < 365; i++) {\n    const dot = document.createElement('div');\n    dot.className = 'dot';\n\n    \/\/ Use today's live result if locked, otherwise use stored value\n    let val;\n    if (i === todayIdx && state.todayLocked) {\n      val = state.dots[i]; \/\/ already stored when locked\n    } else {\n      val = state.dots[i];\n    }\n\n    if (i === todayIdx) {\n      dot.classList.add('today');\n      if (val === 'green') dot.classList.add('green');\n      else if (val === 'red') dot.classList.add('red');\n      \/\/ If not yet locked, today's dot pulses white — no colour class\n    } else {\n      if (val === 'green') dot.classList.add('green');\n      else if (val === 'red') dot.classList.add('red');\n    }\n\n    grid.appendChild(dot);\n  }\n}\n\nfunction renderStats() {\n  const green = state.dots.filter(d => d === 'green').length;\n  const red = state.dots.filter(d => d === 'red').length;\n  const left = 365 - green - red;\n\n  \/\/ Streak\n  const todayIdx = getTodayIndex();\n  let streak = 0;\n  for (let i = todayIdx - 1; i >= 0; i--) {\n    if (state.dots[i] === 'green') streak++;\n    else break;\n  }\n  if (state.dots[todayIdx] === 'green') streak++;\n\n  document.getElementById('statGreen').textContent = green;\n  document.getElementById('statRed').textContent = red;\n  document.getElementById('statLeft').textContent = left;\n  document.getElementById('statStreak').textContent = streak + '🔥';\n}\n\nfunction renderChecklist() {\n  const list = document.getElementById('checklist');\n  list.innerHTML = '';\n  const todayIdx = getTodayIndex();\n  const locked = state.dots[todayIdx] !== null && state.dots[todayIdx] !== undefined;\n\n  state.goals.forEach(g => {\n    const done = state.checked[g.id] || false;\n    const item = document.createElement('div');\n    item.className = 'check-item' + (done ? ' done' : '');\n    item.onclick = () => {\n      if (locked) return;\n      state.checked[g.id] = !state.checked[g.id];\n      saveState();\n      renderChecklist();\n      renderLockBtn();\n    };\n    item.innerHTML = `\n      <div class=\"check-circle\">\n        ${done ? '<svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\"><path d=\"M2 6l3 3 5-5\" stroke=\"#000\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"\/><\/svg>' : ''}\n      <\/div>\n      <span class=\"check-emoji\">${g.emoji}<\/span>\n      <span class=\"check-label\">${g.text}<\/span>\n    `;\n    list.appendChild(item);\n  });\n\n  const done = Object.values(state.checked).filter(Boolean).length;\n  const total = state.goals.length;\n  document.getElementById('goalCount').textContent = done + '\/' + total;\n  document.getElementById('goalCount').style.color = done === total ? 'var(--green)' : 'var(--muted)';\n}\n\nfunction renderLockBtn() {\n  const todayIdx = getTodayIndex();\n  const locked = state.dots[todayIdx] !== null && state.dots[todayIdx] !== undefined;\n  const allDone = state.goals.length > 0 && state.goals.every(g => state.checked[g.id]);\n  const done = Object.values(state.checked).filter(Boolean).length;\n  const total = state.goals.length;\n  const pct = total > 0 ? (done \/ total) * 100 : 0;\n\n  document.getElementById('progressFill').style.width = pct + '%';\n\n  const btn = document.getElementById('lockBtn');\n  const hint = document.getElementById('lockHint');\n  const badge = document.getElementById('todayLockedBadge');\n\n  if (locked) {\n    btn.style.display = 'none';\n    hint.style.display = 'none';\n    badge.style.display = 'block';\n    const result = state.dots[todayIdx];\n    badge.innerHTML = `<span class=\"locked-badge ${result === 'red' ? 'red-badge' : ''}\">\n      ${result === 'green' ? '🟢' : '🔴'} Day locked in\n    <\/span>`;\n  } else {\n    btn.style.display = 'block';\n    hint.style.display = 'block';\n    badge.style.display = 'none';\n    btn.className = 'lock-btn ' + (allDone ? 'all-done' : 'not-done');\n    btn.textContent = allDone ? '🔒 Lock In The Day' : '🔒 Lock In Anyway';\n    hint.textContent = allDone ? \"You've met your standard today 🟢\" : 'Complete all goals for a 🟢 green dot';\n  }\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ LOCK IN\n\/\/ ══════════════════════════════════════════\nfunction lockInDay() {\n  const todayIdx = getTodayIndex();\n  if (state.dots[todayIdx] !== null && state.dots[todayIdx] !== undefined) return;\n\n  const allDone = state.goals.length > 0 && state.goals.every(g => state.checked[g.id]);\n  const result = allDone ? 'green' : 'red';\n\n  state.dots[todayIdx] = result;\n  state.todayLocked = true;\n  state.todayResult = result;\n  saveState();\n\n  \/\/ Show confirm screen\n  const dot = document.getElementById('confirmDot');\n  dot.className = 'confirm-dot ' + result;\n\n  document.getElementById('confirmTitle').textContent = 'Day locked in.';\n  const sub = document.getElementById('confirmSub');\n  sub.textContent = result === 'green' ? 'You showed up. 🔥' : 'Tomorrow is a new dot.';\n  sub.className = 'confirm-sub ' + result;\n\n  \/\/ Generate wallpaper and save to Photos + trigger Shortcut\n  generateWallpaper();\n  saveToPhotosAndRunShortcut();\n  showScreen('confirm');\n}\n\nfunction saveToPhotosAndRunShortcut() {\n  const canvas = document.getElementById('wallpaperCanvas');\n  canvas.toBlob(function(blob) {\n    const file = new File([blob], 'the-standard-wallpaper.png', { type: 'image\/png' });\n\n    \/\/ Use Web Share API to pop up the share sheet instantly\n    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {\n      navigator.share({\n        files: [file],\n        title: 'The Standard — Lock In The Day',\n      }).catch(err => {\n        \/\/ User cancelled or error — fall back to showing image\n        showWallpaperFallback(canvas);\n      });\n    } else {\n      \/\/ Fallback for browsers that don't support file sharing\n      showWallpaperFallback(canvas);\n    }\n  }, 'image\/png');\n}\n\nfunction showWallpaperFallback(canvas) {\n  const existing = document.getElementById('wallpaperImgPreview');\n  if (existing) existing.remove();\n\n  const wrapper = document.createElement('div');\n  wrapper.id = 'wallpaperImgPreview';\n  wrapper.style.cssText = 'width:100%;text-align:center;margin-bottom:12px;';\n\n  const hint = document.createElement('p');\n  hint.style.cssText = 'color:#888;font-size:12px;margin-bottom:10px;line-height:1.6;font-family:sans-serif;';\n  hint.innerHTML = 'Press and hold the image below<br><strong style=\"color:#fff\">→ Save to Photos<\/strong>, then run your Shortcut';\n\n  const img = document.createElement('img');\n  img.src = canvas.toDataURL('image\/png');\n  img.style.cssText = 'width:100%;border-radius:12px;border:1px solid #222;display:block;';\n\n  wrapper.appendChild(hint);\n  wrapper.appendChild(img);\n\n  const confirmScreen = document.getElementById('screen-confirm');\n  const doneBtn = confirmScreen.querySelector('.done-btn');\n  confirmScreen.insertBefore(wrapper, doneBtn);\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ WALLPAPER GENERATION\n\/\/ ══════════════════════════════════════════\nfunction generateWallpaper() {\n  const canvas = document.getElementById('wallpaperCanvas');\n  const ctx = canvas.getContext('2d');\n\n  const W = 1290;\n  const H = 2796;\n  canvas.width = W;\n  canvas.height = H;\n\n  ctx.fillStyle = '#000000';\n  ctx.fillRect(0, 0, W, H);\n\n  const cols = 21;\n  const rows = 18;\n\n  \/\/ Match Keynote spacing — 90% screen width, true center\n  const cellSize = (W * 0.90) \/ cols;\n  const gap = cellSize * 0.25;\n  const dotSize = cellSize - gap;\n  const radius = dotSize \/ 2;\n\n  const gridW = cols * cellSize;\n  const gridH = rows * cellSize;\n\n  \/\/ Center grid on canvas\n  const startX = (W - gridW) \/ 2;\n  const startY = (H - gridH) \/ 2;\n\n  const todayIdx = getTodayIndex();\n\n  for (let i = 0; i < 365; i++) {\n    const col = i % cols;\n    const row = Math.floor(i \/ cols);\n\n    \/\/ Center of each dot\n    const cx = startX + col * cellSize + cellSize \/ 2;\n    const cy = startY + row * cellSize + cellSize \/ 2;\n\n    ctx.beginPath();\n    ctx.arc(cx, cy, radius, 0, Math.PI * 2);\n\n    const val = state.dots[i];\n    if (val === 'green') ctx.fillStyle = '#4ade80';\n    else if (val === 'red')  ctx.fillStyle = '#f87171';\n    else if (i === todayIdx) ctx.fillStyle = '#3a3a3a';\n    else ctx.fillStyle = '#1a1a1a';\n\n    ctx.fill();\n  }\n}\n\nfunction downloadWallpaper() {\n  generateWallpaper();\n  const canvas = document.getElementById('wallpaperCanvas');\n  const dataUrl = canvas.toDataURL('image\/png');\n\n  \/\/ Show the image directly in the confirm screen so user can press-hold to save\n  const existing = document.getElementById('wallpaperImgPreview');\n  if (existing) existing.remove();\n\n  const wrapper = document.createElement('div');\n  wrapper.id = 'wallpaperImgPreview';\n  wrapper.style.cssText = 'width:100%;text-align:center;margin-bottom:12px;';\n\n  const hint = document.createElement('p');\n  hint.style.cssText = 'color:#888;font-size:12px;margin-bottom:10px;line-height:1.5;';\n  hint.innerHTML = 'Press and hold the image below<br><strong style=\"color:#fff\">→ Save to Photos<\/strong>';\n\n  const img = document.createElement('img');\n  img.src = dataUrl;\n  img.style.cssText = 'width:100%;border-radius:12px;border:1px solid #222;';\n\n  wrapper.appendChild(hint);\n  wrapper.appendChild(img);\n\n  \/\/ Insert before the download button\n  const dlBtn = document.querySelector('#screen-confirm .download-btn');\n  dlBtn.parentNode.insertBefore(wrapper, dlBtn);\n  dlBtn.textContent = '↑ Image ready above — press and hold to save';\n  dlBtn.style.fontSize = '13px';\n  dlBtn.onclick = null;\n\n  \/\/ Scroll down to show it\n  wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ SHARE\n\/\/ ══════════════════════════════════════════\nfunction renderShare() {\n  const encoded = btoa(JSON.stringify({\n    name: state.name,\n    goals: state.goals,\n    dots: state.dots,\n    startDate: state.startDate,\n  }));\n\n  const base = window.location.origin + window.location.pathname;\n  const shareLink = base + '?d=' + encoded;\n  const inviteLink = base;\n\n  document.getElementById('shareUrl').textContent = shareLink;\n  document.getElementById('inviteUrl').textContent = inviteLink;\n}\n\nfunction copyUrl() {\n  const url = document.getElementById('shareUrl').textContent;\n  navigator.clipboard.writeText(url).then(() => {\n    const btn = document.querySelector('#screen-share .copy-btn');\n    btn.textContent = 'Copied!';\n    setTimeout(() => btn.textContent = 'Copy', 2000);\n  });\n}\n\nfunction copyInvite() {\n  const url = document.getElementById('inviteUrl').textContent;\n  navigator.clipboard.writeText(url).then(() => {\n    const btns = document.querySelectorAll('#screen-share .copy-btn');\n    btns[1].textContent = 'Copied!';\n    setTimeout(() => btns[1].textContent = 'Copy', 2000);\n  });\n}\n\nfunction resetAll() {\n  if (confirm('This will clear all your data and start fresh. Are you sure?')) {\n    localStorage.removeItem(STORAGE_KEY);\n    state = { name:'', goals:[], dots:[], startDate:'2025-01-01', checked:{}, todayLocked:false, todayResult:null };\n    goalIdCounter = 1;\n    initSetup();\n    animateLandingDots();\n    showScreen('landing');\n  }\n}\n\n\/\/ ══════════════════════════════════════════\n\/\/ STORAGE\n\/\/ ══════════════════════════════════════════\nfunction saveState() {\n  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));\n}\n<\/script>\n<\/body>\n<\/html>\n",
-  "stderr" : ""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Standard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root{--green:#4ade80;--red:#f87171;--empty:#1e1e1e;--bg:#0a0a0a;--surface:#111111;--border:#1e1e1e;--text:#ffffff;--muted:#444444}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+  .screen{display:none;width:100%;max-width:420px;padding:0 20px 40px}
+  .screen.active{display:flex;flex-direction:column}
+  #screen-landing{min-height:100vh;justify-content:center;align-items:center;text-align:center}
+  .landing-dots{display:grid;grid-template-columns:repeat(21,1fr);gap:4px;margin-bottom:40px;opacity:0;animation:fadeUp 0.8s ease forwards 0.2s}
+  .landing-dot{aspect-ratio:1;border-radius:50%;background:var(--empty)}
+  .landing-title{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:10px;opacity:0;animation:fadeUp 0.8s ease forwards 0.4s}
+  .landing-sub{font-size:15px;color:var(--muted);margin-bottom:48px;line-height:1.6;opacity:0;animation:fadeUp 0.8s ease forwards 0.5s}
+  .landing-btns{display:flex;flex-direction:column;gap:12px;width:100%;opacity:0;animation:fadeUp 0.8s ease forwards 0.6s}
+  #screen-setup{padding-top:60px;gap:24px}
+  .setup-title{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;margin-bottom:6px}
+  .setup-sub{font-size:14px;color:var(--muted);line-height:1.5}
+  .goals-list{display:flex;flex-direction:column;gap:10px}
+  .goal-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+  .goal-emoji-btn{font-size:20px;background:none;border:none;cursor:pointer;padding:2px;border-radius:8px}
+  .goal-input{flex:1;background:none;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none}
+  .goal-input::placeholder{color:var(--muted)}
+  .goal-delete{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:6px}
+  .add-goal-btn{display:flex;align-items:center;gap:8px;background:none;border:1px dashed #2a2a2a;border-radius:14px;padding:12px 14px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;width:100%}
+  #screen-home{padding-top:50px;gap:16px}
+  .home-header{display:flex;justify-content:space-between;align-items:flex-start}
+  .home-date{font-size:12px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px}
+  .home-title{font-family:'Space Mono',monospace;font-size:20px;font-weight:700}
+  .settings-btn{background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);padding:6px 10px;cursor:pointer;font-size:16px}
+  .grid-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px}
+  .dot-grid{display:grid;grid-template-columns:repeat(21,1fr);gap:4px;margin-bottom:14px}
+  .dot{aspect-ratio:1;border-radius:50%;background:var(--empty);transition:all 0.3s ease}
+  .dot.green{background:var(--green)}
+  .dot.red{background:var(--red)}
+  .dot.today{box-shadow:0 0 0 2px var(--bg),0 0 0 3px #ffffff44;transform:scale(1.15)}
+  .dot.today.green{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--green)}
+  .dot.today.red{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--red)}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .stat{text-align:center;background:#0d0d0d;border-radius:10px;padding:8px 4px}
+  .stat-val{font-family:'Space Mono',monospace;font-size:15px;font-weight:700}
+  .stat-val.green{color:var(--green)}.stat-val.red{color:var(--red)}.stat-val.streak{color:#facc15}
+  .stat-label{font-size:10px;color:var(--muted);margin-top:2px}
+  .section-label{font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:2px}
+  .checklist{display:flex;flex-direction:column;gap:8px}
+  .check-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all 0.2s ease;user-select:none}
+  .check-item.done{background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.2)}
+  .check-circle{width:22px;height:22px;border-radius:50%;border:2px solid #333;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s ease}
+  .check-item.done .check-circle{background:var(--green);border-color:var(--green)}
+  .check-emoji{font-size:16px}
+  .check-label{font-size:15px;color:#ccc;flex:1;transition:color 0.2s}
+  .check-item.done .check-label{color:var(--green)}
+  .progress-wrap{margin-top:4px}
+  .progress-bar{height:2px;background:#1a1a1a;border-radius:2px;overflow:hidden;margin-bottom:14px}
+  .progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width 0.4s ease}
+  .lock-btn{width:100%;padding:17px;border-radius:18px;border:none;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s ease}
+  .lock-btn.all-done{background:linear-gradient(135deg,#4ade80,#22c55e);color:#000;box-shadow:0 8px 24px rgba(74,222,128,0.25)}
+  .lock-btn.not-done{background:linear-gradient(135deg,#f87171,#ef4444);color:#000;box-shadow:0 8px 24px rgba(248,113,113,0.2)}
+  .lock-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:8px}
+  #screen-confirm{min-height:100vh;justify-content:center;align-items:center;text-align:center;gap:0}
+  .confirm-dot{width:96px;height:96px;border-radius:50%;margin:0 auto 28px;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards}
+  .confirm-dot.green{background:radial-gradient(circle at 35% 35%,#86efac,#16a34a);box-shadow:0 0 40px rgba(74,222,128,0.4),0 0 80px rgba(74,222,128,0.15)}
+  .confirm-dot.red{background:radial-gradient(circle at 35% 35%,#fca5a5,#dc2626);box-shadow:0 0 40px rgba(248,113,113,0.4),0 0 80px rgba(248,113,113,0.15)}
+  .confirm-title{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;margin-bottom:8px}
+  .confirm-sub{font-size:15px;margin-bottom:6px;font-weight:500}
+  .confirm-sub.green{color:var(--green)}.confirm-sub.red{color:var(--red)}
+  .confirm-note{font-size:12px;color:var(--muted);margin-bottom:24px}
+  .wallpaper-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;text-align:left;margin-bottom:24px}
+  .wallpaper-box-title{font-size:12px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px}
+  .wallpaper-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+  .wallpaper-step:last-child{margin-bottom:0}
+  .step-num{width:22px;height:22px;border-radius:50%;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'Space Mono',monospace;flex-shrink:0;color:#888}
+  .step-text{font-size:13px;color:#aaa;line-height:1.5;padding-top:2px}
+  .step-text strong{color:var(--text)}
+  .download-btn{width:100%;padding:15px;border-radius:16px;border:1px solid #2a2a2a;background:#1a1a1a;color:#ccc;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px}
+  .done-btn{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:10px}
+  #screen-share{padding-top:60px;gap:20px}
+  .share-title{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;margin-bottom:4px}
+  .share-sub{font-size:14px;color:var(--muted);line-height:1.5}
+  .url-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .url-text{flex:1;font-family:'Space Mono',monospace;font-size:11px;color:var(--green);word-break:break-all;line-height:1.4}
+  .copy-btn{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#888;font-size:12px;padding:6px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+  .info-box{background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.15);border-radius:14px;padding:16px;font-size:13px;color:#aaa;line-height:1.6}
+  .info-box strong{color:var(--green)}
+  .btn-primary{width:100%;padding:16px;border-radius:18px;border:none;background:var(--green);color:#000;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer}
+  .btn-secondary{width:100%;padding:15px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:#888;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer}
+  .divider{height:1px;background:var(--border)}
+  .locked-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--green);font-weight:500}
+  .locked-badge.red-badge{background:rgba(248,113,113,0.1);border-color:rgba(248,113,113,0.2);color:var(--red)}
+  canvas{display:none}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<div id="screen-landing" class="screen active">
+  <div class="landing-dots" id="landingDots"></div>
+  <div class="landing-title">THE STANDARD</div>
+  <div class="landing-sub">Set your standard.<br>Meet it daily.<br>365 dots. No excuses.</div>
+  <div class="landing-btns" id="landingBtns">
+    <button class="btn-primary" onclick="showScreen('setup');initSetup()">Start My Year</button>
+    <button class="btn-secondary" onclick="loadExisting()">I Already Have an Account</button>
+    <button onclick="resetAll()" style="background:none;border:none;color:#2a2a2a;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:8px;text-decoration:underline">Reset & Start Over</button>
+  </div>
+</div>
+
+<div id="screen-setup" class="screen">
+  <div>
+    <div class="setup-title">What's your name?</div>
+    <div class="setup-sub">This is how we'll greet you every day.</div>
+  </div>
+
+  <!-- Name field - big and prominent at the top -->
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:18px;padding:20px 20px 16px;">
+    <input id="userName" placeholder="Enter your name..." maxlength="20"
+      style="width:100%;background:none;border:none;color:#fff;font-family:'Space Mono',monospace;
+      font-size:28px;font-weight:700;outline:none;letter-spacing:-0.5px;"
+      oninput="updateNamePreview(this.value)">
+    <div style="font-size:11px;color:#444;margin-top:8px;letter-spacing:0.08em;text-transform:uppercase">Your name</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="setup-title" style="font-size:18px">What's your standard?</div>
+    <div class="setup-sub">Add up to 5 daily goals. Complete all of them for a 🟢 green dot.</div>
+  </div>
+  <div class="goals-list" id="goalsList"></div>
+  <button class="add-goal-btn" id="addGoalBtn" onclick="addGoal()"><span>＋</span> Add a goal</button>
+
+  <button class="btn-primary" onclick="finishSetup()">Set My Standard →</button>
+  <button class="btn-secondary" onclick="showScreen('landing')">← Back</button>
+</div>
+
+<div id="screen-home" class="screen">
+  <div class="home-header">
+    <div>
+      <div class="home-date" id="homeDate"></div>
+      <div class="home-title">THE STANDARD</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="settings-btn" onclick="showScreen('share')">⤴ Share</button>
+      <button class="settings-btn" onclick="resetAll()" style="color:#444">↺</button>
+    </div>
+  </div>
+  <div class="grid-card">
+    <div class="dot-grid" id="dotGrid"></div>
+
+    <!-- Stats strip filling the incomplete last row space -->
+    <div id="statsStrip" style="display:flex;justify-content:space-between;align-items:center;padding:8px 4px 4px;margin-bottom:10px;border-top:1px solid #1a1a1a;margin-top:6px;">
+      <div style="text-align:center;flex:1">
+        <div id="stripPct" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#4ade80"></div>
+        <div style="font-size:9px;color:#444;margin-top:1px;text-transform:uppercase;letter-spacing:0.08em">complete</div>
+      </div>
+      <div style="width:1px;height:28px;background:#1e1e1e"></div>
+      <div style="text-align:center;flex:1">
+        <div id="stripDays" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#fff"></div>
+        <div style="font-size:9px;color:#444;margin-top:1px;text-transform:uppercase;letter-spacing:0.08em">locked in</div>
+      </div>
+      <div style="width:1px;height:28px;background:#1e1e1e"></div>
+      <div style="text-align:center;flex:1">
+        <div id="stripLeft" style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#888"></div>
+        <div style="font-size:9px;color:#444;margin-top:1px;text-transform:uppercase;letter-spacing:0.08em">days left</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val green" id="statGreen">0</div><div class="stat-label">Green</div></div>
+      <div class="stat"><div class="stat-val red" id="statRed">0</div><div class="stat-label">Red</div></div>
+      <div class="stat"><div class="stat-val" id="statLeft" style="color:#888">0</div><div class="stat-label">Left</div></div>
+      <div class="stat"><div class="stat-val streak" id="statStreak">0🔥</div><div class="stat-label">Streak</div></div>
+    </div>
+  </div>
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="section-label">Today's Goals</div>
+      <div id="goalCount" style="font-size:12px;color:var(--muted);font-weight:600"></div>
+    </div>
+    <div class="checklist" id="checklist"></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <button class="lock-btn not-done" id="lockBtn" onclick="lockInDay()">🔒 Lock In The Day</button>
+    <div class="lock-hint" id="lockHint">Complete all goals for a 🟢 green dot</div>
+  </div>
+  <div id="todayLockedBadge" style="display:none;text-align:center"></div>
+</div>
+
+<div id="screen-confirm" class="screen">
+  <div class="confirm-dot" id="confirmDot"></div>
+  <div class="confirm-title" id="confirmTitle"></div>
+  <div class="confirm-sub" id="confirmSub"></div>
+  <div class="confirm-note">Share your wallpaper ↓</div>
+  <div class="wallpaper-box">
+    <div class="wallpaper-box-title">Update your wallpaper</div>
+    <div class="wallpaper-step">
+      <div class="step-num">1</div>
+      <div class="step-text">Wait for button to say <strong>"Share Wallpaper"</strong> then tap it</div>
+    </div>
+    <div class="wallpaper-step">
+      <div class="step-num">2</div>
+      <div class="step-text">Share sheet pops up — tap <strong>"Lock In The Day"</strong> Shortcut</div>
+    </div>
+    <div class="wallpaper-step">
+      <div class="step-num">3</div>
+      <div class="step-text">Lock screen <strong>updates instantly</strong> ✅</div>
+    </div>
+  </div>
+  <a id="shareWallpaperBtn" class="download-btn" style="display:block;text-align:center;text-decoration:none;cursor:pointer" onclick="shareWallpaper(event)">⤴ Share Wallpaper</a>
+  <button class="done-btn" onclick="showScreen('home')">Done →</button>
+  <canvas id="wallpaperCanvas" width="1290" height="2796"></canvas>
+</div>
+
+<div id="screen-share" class="screen">
+  <div>
+    <div class="share-title">Share The Standard</div>
+    <div class="share-sub">Send this link to friends and family. They get their own dot grid, their own goals, their own year.</div>
+  </div>
+  <div>
+    <div class="section-label" style="margin-bottom:10px">Invite someone new</div>
+    <div class="url-box">
+      <div class="url-text" id="inviteUrl"></div>
+      <button class="copy-btn" onclick="copyInvite()">Copy</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5">Send this to someone who wants to start their own year from scratch.</div>
+  </div>
+  <div class="info-box"><strong>Your data is safe.</strong> Everything is stored on your phone. Nobody can see your dots unless you share your link.</div>
+  <button class="btn-secondary" onclick="showScreen('home')">← Back</button>
+</div>
+
+<!-- Edit Day Popup -->
+<div id="editPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:24px;width:280px;text-align:center;">
+    <div id="editPopupDate" style="font-size:12px;color:#666;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px"></div>
+    <div id="editPopupDay" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#fff;margin-bottom:20px"></div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;">
+      <button onclick="setDotColor('green')" style="flex:1;padding:14px;border-radius:14px;border:none;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">🟢 Green</button>
+      <button onclick="setDotColor('red')" style="flex:1;padding:14px;border-radius:14px;border:none;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:#f87171;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">🔴 Red</button>
+    </div>
+    <button onclick="closeEditPopup()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #2a2a2a;background:none;color:#666;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<script>
+// startDate set to today by default - never changes after first save
+function todayStr(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
+let state={name:'',goals:[],dots:[],startDate:todayStr(),checked:{},todayLocked:false,todayResult:null};
+const STORAGE_KEY='thestandard_v2';
+let goalIdCounter=1;
+
+window.addEventListener('load',()=>{
+  const params=new URLSearchParams(window.location.search);
+  const encoded=params.get('d');
+  if(encoded){
+    try{
+      const decoded=JSON.parse(atob(encoded));
+      // Support both compressed and legacy dot formats
+      if(decoded.dotsCompressed){
+        decoded.dots=decompressDots(decoded.dotsCompressed);
+        delete decoded.dotsCompressed;
+      }
+      state={...state,...decoded};
+      const idx=getTodayIndex();
+      state.todayLocked=state.dots[idx]!==null&&state.dots[idx]!==undefined;
+      state.todayResult=state.dots[idx]||null;
+      state.checked={};
+      state.goals.forEach(g=>state.checked[g.id]=false);
+      saveState();renderHome();showScreen('home');return;
+    }catch(e){}
+  }
+  animateLandingDots();
+  initSetup();
+  const saved=localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    try{
+      const parsed=JSON.parse(saved);
+      if(parsed&&parsed.goals&&parsed.goals.length>0){
+        const btns=document.getElementById('landingBtns');
+        const btn=document.createElement('button');
+        btn.className='btn-primary';
+        btn.textContent='▶ Continue as '+(parsed.name||'You');
+        btn.onclick=function(){
+          state=parsed;
+          const idx=getTodayIndex();
+          state.todayLocked=state.dots[idx]!==null&&state.dots[idx]!==undefined;
+          state.todayResult=state.dots[idx]||null;
+          renderHome();showScreen('home');
+        };
+        btns.insertBefore(btn,btns.firstChild);
+      }
+    }catch(e){}
+  }
+  showScreen('landing');
+});
+
+function animateLandingDots(){
+  const c=document.getElementById('landingDots');
+  for(let i=0;i<63;i++){
+    const d=document.createElement('div');
+    d.className='landing-dot';
+    const r=Math.random();
+    if(r<0.3)d.style.background='#4ade80';
+    else if(r<0.55)d.style.background='#f87171';
+    setTimeout(()=>c.appendChild(d),i*20);
+  }
 }
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(name==='share')renderShare();
+}
+
+function loadExisting(){
+  const code=prompt('Enter your personal code:');
+  if(code){
+    try{
+      const decoded=JSON.parse(atob(code));
+      state={...state,...decoded};
+      saveState();renderHome();showScreen('home');
+    }catch(e){alert('Invalid code.');}
+  }
+}
+
+function updateNamePreview(val){
+  // Live update the button text as they type
+  const btn=document.querySelector('#screen-setup .btn-primary');
+  if(btn) btn.textContent=val.trim() ? 'Set My Standard, '+val.trim()+' →' : 'Set My Standard →';
+}
+
+function initSetup(){
+  goalIdCounter=1;
+  state.goals=[];
+  document.getElementById('goalsList').innerHTML='';
+  addGoalRow('💪','20 min exercise');
+}
+
+function addGoal(){
+  if(state.goals.length>=5)return;
+  addGoalRow('🎯','');
+}
+
+function addGoalRow(emoji,text){
+  if(state.goals.length>=5){
+    document.getElementById('addGoalBtn').style.opacity='0.3';
+    document.getElementById('addGoalBtn').disabled=true;
+    return;
+  }
+  const id=goalIdCounter++;
+  state.goals.push({id,emoji,text});
+  const row=document.createElement('div');
+  row.className='goal-row';
+  row.id='goal-row-'+id;
+  row.innerHTML=`<button class="goal-emoji-btn" onclick="pickEmoji(${id})" id="emoji-${id}">${emoji}</button><input class="goal-input" placeholder="Your goal..." value="${text}" oninput="updateGoalText(${id},this.value)" id="goaltext-${id}"><button class="goal-delete" onclick="deleteGoal(${id})">×</button>`;
+  document.getElementById('goalsList').appendChild(row);
+  if(state.goals.length>=5){document.getElementById('addGoalBtn').style.opacity='0.3';document.getElementById('addGoalBtn').disabled=true;}
+}
+
+function updateGoalText(id,val){const g=state.goals.find(g=>g.id===id);if(g)g.text=val;}
+function deleteGoal(id){
+  state.goals=state.goals.filter(g=>g.id!==id);
+  document.getElementById('goal-row-'+id)?.remove();
+  document.getElementById('addGoalBtn').style.opacity='1';
+  document.getElementById('addGoalBtn').disabled=false;
+}
+function pickEmoji(id){
+  const e=prompt('Type or paste an emoji:',document.getElementById('emoji-'+id).textContent);
+  if(e){document.getElementById('emoji-'+id).textContent=e;const g=state.goals.find(g=>g.id===id);if(g)g.emoji=e;}
+}
+
+function finishSetup(){
+  const name=document.getElementById('userName').value.trim()||'You';
+  state.goals.forEach(g=>{const el=document.getElementById('goaltext-'+g.id);if(el)g.text=el.value.trim()||g.text;});
+  if(state.goals.length===0){alert('Add at least one goal!');return;}
+  if(state.goals.some(g=>!g.text)){alert('Please fill in all your goals.');return;}
+  state.name=name;
+  state.dots=new Array(365).fill(null);
+  state.checked={};
+  state.goals.forEach(g=>state.checked[g.id]=false);
+  state.todayLocked=false;state.todayResult=null;
+  if(name.toLowerCase()==='chad'){
+    // Chad's history starts Jan 1 2026
+    state.startDate='2026-01-01';
+    loadChadHistory();
+  } else {
+    // Lock startDate to today - never changes after this point
+    if(!state.startDate) state.startDate=todayStr();
+  }
+  saveState();renderHome();showScreen('home');
+}
+
+function loadChadHistory(){
+  let greens=49,reds=68;
+  for(let i=0;i<117;i++){
+    const remaining=117-i;
+    const prob=greens/remaining;
+    if(Math.random()<prob&&greens>0){state.dots[i]='green';greens--;}
+    else{state.dots[i]='red';reds--;}
+  }
+}
+
+function getTodayIndex(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(state.startDate||'2026-01-01');start.setHours(0,0,0,0);
+  const diff=Math.floor((today-start)/(1000*60*60*24));
+  return Math.max(0,Math.min(364,diff));
+}
+
+function renderHome(){
+  const today=new Date();
+  document.getElementById('homeDate').textContent=today.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  renderDotGrid();renderStats();renderChecklist();renderLockBtn();
+}
+
+let _editingDotIdx = null;
+
+function renderDotGrid(){
+  const grid=document.getElementById('dotGrid');
+  grid.innerHTML='';
+  const todayIdx=getTodayIndex();
+  for(let i=0;i<365;i++){
+    const dot=document.createElement('div');
+    dot.className='dot';
+    const val=state.dots[i];
+    if(i===todayIdx){
+      dot.classList.add('today');
+      if(val==='green')dot.classList.add('green');
+      else if(val==='red')dot.classList.add('red');
+    } else {
+      if(val==='green')dot.classList.add('green');
+      else if(val==='red')dot.classList.add('red');
+    }
+    // Only allow tapping EMPTY past days - locked days cannot be changed
+    const isPast = i < todayIdx;
+    const isEmpty = val === null || val === undefined;
+    if(isPast && isEmpty){
+      dot.style.cursor='pointer';
+      dot.style.opacity='0.7'; // subtle hint it's tappable
+      dot.addEventListener('click',(()=>{
+        const idx=i;
+        return ()=>openEditPopup(idx);
+      })());
+    }
+    grid.appendChild(dot);
+  }
+}
+
+function openEditPopup(idx){
+  // Don't open if today is already locked via normal flow
+  // but DO allow editing today if they want to change it
+  const start=new Date(state.startDate||todayStr());
+  start.setHours(0,0,0,0);
+  const dotDate=new Date(start.getTime()+idx*24*60*60*1000);
+  const dayName=dotDate.toLocaleDateString('en-ZA',{weekday:'long'});
+  const dateStr=dotDate.toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'});
+
+  _editingDotIdx=idx;
+  document.getElementById('editPopupDate').textContent='Missed day - '+dayName;
+  document.getElementById('editPopupDay').textContent=dateStr;
+  document.getElementById('editPopup').style.display='flex';
+}
+
+function setDotColor(color){
+  if(_editingDotIdx===null)return;
+  // Safety check - never overwrite an already locked day
+  const existing=state.dots[_editingDotIdx];
+  if(existing==='green'||existing==='red'){
+    closeEditPopup();
+    return;
+  }
+  state.dots[_editingDotIdx]=color;
+  saveState();
+  renderDotGrid();
+  renderStats();
+  renderLockBtn();
+  closeEditPopup();
+}
+
+function closeEditPopup(){
+  document.getElementById('editPopup').style.display='none';
+  _editingDotIdx=null;
+}
+
+function renderStats(){
+  const green=state.dots.filter(d=>d==='green').length;
+  const red=state.dots.filter(d=>d==='red').length;
+  const total=green+red;
+  const left=365-total;
+  const pct=Math.round((total/365)*100);
+  const todayIdx=getTodayIndex();
+  let streak=0;
+  for(let i=todayIdx-(state.dots[todayIdx]==='green'?0:1);i>=0;i--){
+    if(state.dots[i]==='green')streak++;else break;
+  }
+  document.getElementById('statGreen').textContent=green;
+  document.getElementById('statRed').textContent=red;
+  document.getElementById('statLeft').textContent=left;
+  document.getElementById('statStreak').textContent=streak+'🔥';
+
+  // Update stats strip
+  document.getElementById('stripPct').textContent=pct+'%';
+  document.getElementById('stripDays').textContent=total;
+  document.getElementById('stripLeft').textContent=left;
+}
+
+function renderChecklist(){
+  const list=document.getElementById('checklist');
+  list.innerHTML='';
+  const todayIdx=getTodayIndex();
+  const locked=state.dots[todayIdx]!==null&&state.dots[todayIdx]!==undefined;
+  state.goals.forEach(g=>{
+    const done=state.checked[g.id]||false;
+    const item=document.createElement('div');
+    item.className='check-item'+(done?' done':'');
+    item.onclick=()=>{
+      if(locked)return;
+      state.checked[g.id]=!state.checked[g.id];
+      saveState();renderChecklist();renderLockBtn();
+    };
+    item.innerHTML=`<div class="check-circle">${done?'<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div><span class="check-emoji">${g.emoji}</span><span class="check-label">${g.text}</span>`;
+    list.appendChild(item);
+  });
+  const done=Object.values(state.checked).filter(Boolean).length;
+  const total=state.goals.length;
+  document.getElementById('goalCount').textContent=done+'/'+total;
+  document.getElementById('goalCount').style.color=done===total?'var(--green)':'var(--muted)';
+}
+
+function renderLockBtn(){
+  const todayIdx=getTodayIndex();
+  const locked=state.dots[todayIdx]!==null&&state.dots[todayIdx]!==undefined;
+  const allDone=state.goals.length>0&&state.goals.every(g=>state.checked[g.id]);
+  const done=Object.values(state.checked).filter(Boolean).length;
+  const total=state.goals.length;
+  document.getElementById('progressFill').style.width=(total>0?(done/total)*100:0)+'%';
+  const btn=document.getElementById('lockBtn');
+  const hint=document.getElementById('lockHint');
+  const badge=document.getElementById('todayLockedBadge');
+  if(locked){
+    btn.style.display='none';hint.style.display='none';badge.style.display='block';
+    const result=state.dots[todayIdx];
+    badge.innerHTML=`<span class="locked-badge ${result==='red'?'red-badge':''}">${result==='green'?'🟢':'🔴'} Day locked in</span>`;
+  } else {
+    btn.style.display='block';hint.style.display='block';badge.style.display='none';
+    btn.className='lock-btn '+(allDone?'all-done':'not-done');
+    btn.textContent=allDone?'🔒 Lock In The Day':'🔒 Lock In Anyway';
+    hint.textContent=allDone?"You've met your standard today 🟢":'Complete all goals for a 🟢 green dot';
+  }
+}
+
+function lockInDay(){
+  const todayIdx=getTodayIndex();
+  if(state.dots[todayIdx]!==null&&state.dots[todayIdx]!==undefined)return;
+  const allDone=state.goals.length>0&&state.goals.every(g=>state.checked[g.id]);
+  const result=allDone?'green':'red';
+  state.dots[todayIdx]=result;
+  state.todayLocked=true;state.todayResult=result;
+  saveState();
+  document.getElementById('confirmDot').className='confirm-dot '+result;
+  document.getElementById('confirmTitle').textContent='Day locked in.';
+  const sub=document.getElementById('confirmSub');
+  sub.textContent=result==='green'?'You showed up. 🔥':'Tomorrow is a new dot.';
+  sub.className='confirm-sub '+result;
+  // Pre-generate wallpaper
+  generateWallpaper();
+  // Reset blob and show loading state on button
+  _wallpaperBlob=null;
+  const shareBtn=document.getElementById('shareWallpaperBtn');
+  if(shareBtn){
+    shareBtn.textContent='⏳ Preparing wallpaper...';
+    shareBtn.style.opacity='0.6';
+    shareBtn.style.pointerEvents='none';
+  }
+  // Prepare blob in background - button re-enables when ready
+  prepareWallpaperBlob();
+  showScreen('confirm');
+}
+
+let _wallpaperBlob = null;
+
+function prepareWallpaperBlob(){
+  // Use setTimeout 0 to let canvas render complete before converting
+  setTimeout(function(){
+    const canvas=document.getElementById('wallpaperCanvas');
+    canvas.toBlob(function(blob){
+      if(blob){
+        _wallpaperBlob=new File([blob],'the-standard-wallpaper.png',{type:'image/png'});
+        // Update button to show ready state
+        const btn=document.getElementById('shareWallpaperBtn');
+        if(btn){
+          btn.textContent='⤴ Share Wallpaper';
+          btn.style.opacity='1';
+          btn.style.pointerEvents='auto';
+        }
+      }
+    },'image/png');
+  }, 100);
+}
+
+function shareWallpaper(){
+  // blob must already be ready - prepared during lockInDay
+  const canvas=document.getElementById('wallpaperCanvas');
+  if(!_wallpaperBlob){
+    // Not ready yet - show fallback
+    showFallback(canvas);
+    return;
+  }
+  if(navigator.share&&navigator.canShare({files:[_wallpaperBlob]})){
+    navigator.share({
+      files:[_wallpaperBlob],
+      title:'The Standard - Lock In The Day',
+    }).catch(err=>{
+      if(err.name!=='AbortError') showFallback(canvas);
+    });
+  } else {
+    showFallback(canvas);
+  }
+}
+
+function showFallback(canvas){
+  // Share API not supported - show image for manual save
+  const existing=document.getElementById('wallpaperImgPreview');
+  if(existing)existing.remove();
+  const wrapper=document.createElement('div');
+  wrapper.id='wallpaperImgPreview';
+  wrapper.style.cssText='width:100%;text-align:center;margin-bottom:12px;';
+  const hint=document.createElement('p');
+  hint.style.cssText='color:#888;font-size:13px;margin-bottom:10px;line-height:1.6;font-family:sans-serif;';
+  hint.innerHTML="Your browser does not support auto-share.<br>Press and hold image → <strong style='color:#fff'>Save to Photos</strong>";
+  const img=document.createElement('img');
+  img.src=canvas.toDataURL('image/png');
+  img.style.cssText='width:100%;border-radius:12px;border:1px solid #222;display:block;';
+  wrapper.appendChild(hint);
+  wrapper.appendChild(img);
+  const confirmScreen=document.getElementById('screen-confirm');
+  const doneBtn=confirmScreen.querySelector('.done-btn');
+  confirmScreen.insertBefore(wrapper,doneBtn);
+}
+
+function generateWallpaper(){
+  const canvas=document.getElementById('wallpaperCanvas');
+  const ctx=canvas.getContext('2d');
+  const W=1290,H=2796;
+  canvas.width=W;canvas.height=H;
+  ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
+  const cols=21,rows=18;
+  const cellSize=(W*0.90)/cols;
+  const gap=cellSize*0.25;
+  const dotSize=cellSize-gap;
+  const radius=dotSize/2;
+  const gridW=cols*cellSize,gridH=rows*cellSize;
+  const startX=(W-gridW)/2,startY=(H-gridH)/2;
+  const todayIdx=getTodayIndex();
+  for(let i=0;i<365;i++){
+    const col=i%cols,row=Math.floor(i/cols);
+    const cx=startX+col*cellSize+cellSize/2;
+    const cy=startY+row*cellSize+cellSize/2;
+    ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);
+    const val=state.dots[i];
+    if(val==='green')ctx.fillStyle='#4ade80';
+    else if(val==='red')ctx.fillStyle='#f87171';
+    else if(i===todayIdx)ctx.fillStyle='#3a3a3a';
+    else ctx.fillStyle='#1a1a1a';
+    ctx.fill();
+  }
+
+  // Draw stats row below the incomplete last row
+  const green=state.dots.filter(d=>d==='green').length;
+  const total=state.dots.filter(d=>d!==null).length;
+  const left=365-total;
+  const pct=Math.round((total/365)*100);
+
+  const statsY=startY+gridH+cellSize*1.2;
+  ctx.font='bold 38px -apple-system, sans-serif';
+  ctx.textAlign='center';
+
+  // % complete
+  ctx.fillStyle='#4ade80';
+  ctx.fillText(pct+'%',W*0.20,statsY);
+  ctx.fillStyle='#444';
+  ctx.font='26px -apple-system, sans-serif';
+  ctx.fillText('complete',W*0.20,statsY+44);
+
+  // Days locked in
+  ctx.fillStyle='#ffffff';
+  ctx.font='bold 38px -apple-system, sans-serif';
+  ctx.fillText(total+' days',W*0.50,statsY);
+  ctx.fillStyle='#444';
+  ctx.font='26px -apple-system, sans-serif';
+  ctx.fillText('locked in',W*0.50,statsY+44);
+
+  // Days left
+  ctx.fillStyle='#888';
+  ctx.font='bold 38px -apple-system, sans-serif';
+  ctx.fillText(left+' left',W*0.80,statsY);
+  ctx.fillStyle='#444';
+  ctx.font='26px -apple-system, sans-serif';
+  ctx.fillText('to go',W*0.80,statsY+44);
+}
+
+function renderShare(){
+  const base=window.location.origin+window.location.pathname;
+  document.getElementById('inviteUrl').textContent=base;
+
+  // Generate compressed share link for this user's progress
+  const shareable=getShareableState();
+  const encoded=btoa(JSON.stringify(shareable));
+  const shareLink=base+'?d='+encoded;
+  const bytes=new Blob([shareLink]).size;
+  console.log('Share URL size: '+bytes+' bytes');
+}
+
+function copyInvite(){
+  const url=document.getElementById('inviteUrl').textContent;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btns=document.querySelectorAll('#screen-share .copy-btn');
+    btns[0].textContent='Copied!';
+    setTimeout(()=>btns[0].textContent='Copy',2000);
+  });
+}
+
+function resetAll(){
+  if(confirm('Clear all data and start fresh?')){
+    localStorage.removeItem(STORAGE_KEY);
+    state={name:'',goals:[],dots:[],startDate:'2026-01-01',checked:{},todayLocked:false,todayResult:null};
+    goalIdCounter=1;
+    const existing=document.getElementById('continueBtn');
+    if(existing)existing.remove();
+    initSetup();animateLandingDots();showScreen('landing');
+  }
+}
+
+// Compress dots array to short string for URL sharing
+// Format: number+letter e.g. "5r3g10n" = 5 red, 3 green, 10 null
+function compressDots(dots){
+  if(!dots||dots.length===0)return '';
+  let result='',count=1,cur=dots[0];
+  for(let i=1;i<dots.length;i++){
+    if(dots[i]===cur){count++;}
+    else{result+=count+(cur==='green'?'g':cur==='red'?'r':'n');count=1;cur=dots[i];}
+  }
+  result+=count+(cur==='green'?'g':cur==='red'?'r':'n');
+  return result;
+}
+
+function decompressDots(str){
+  if(!str)return new Array(365).fill(null);
+  const dots=[];
+  const matches=str.match(/\d+[grn]/g)||[];
+  matches.forEach(m=>{
+    const count=parseInt(m);
+    const type=m.slice(-1);
+    const val=type==='g'?'green':type==='r'?'red':null;
+    for(let i=0;i<count;i++)dots.push(val);
+  });
+  // Pad to 365 if needed
+  while(dots.length<365)dots.push(null);
+  return dots;
+}
+
+function getShareableState(){
+  return {
+    name:state.name,
+    goals:state.goals,
+    dotsCompressed:compressDots(state.dots),
+    startDate:state.startDate,
+  };
+}
+
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+</script>
+</body>
+</html>
