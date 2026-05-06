@@ -92,6 +92,20 @@
   .locked-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--green);font-weight:500}
   .locked-badge.red-badge{background:rgba(248,113,113,0.1);border-color:rgba(248,113,113,0.2);color:var(--red)}
   canvas{display:none}
+  .colour-swatch{
+    width:64px;height:56px;border-radius:12px;border:2px solid #222;
+    cursor:pointer;display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-end;padding-bottom:6px;
+    transition:all 0.2s;
+  }
+  .colour-swatch:hover{transform:scale(1.05)}
+  .dot-swatch{
+    padding:8px 10px;border-radius:12px;border:2px solid #222;
+    background:#1a1a1a;cursor:pointer;text-align:center;
+    transition:all 0.2s;min-width:72px;
+  }
+  .active-swatch{border-color:#4ade80!important;}
+  .swatch-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:0.05em;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   @keyframes popIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
 </style>
@@ -193,6 +207,89 @@
     <div class="lock-hint" id="lockHint">Complete all goals for a 🟢 green dot</div>
   </div>
   <div id="todayLockedBadge" style="display:none;text-align:center"></div>
+
+  <!-- Customise Button -->
+  <button onclick="showCustomise()" style="
+    width:100%;padding:13px;border-radius:14px;
+    border:1px solid #1e1e1e;background:#111;
+    color:#666;font-family:'DM Sans',sans-serif;
+    font-size:14px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;">
+    🎨 Customise
+  </button>
+</div>
+
+<!-- Customise Modal -->
+<div id="customiseModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:flex-end;justify-content:center;">
+  <div style="background:#111;border:1px solid #222;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:420px;">
+
+    <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">Customise</div>
+    <div style="font-size:13px;color:#555;margin-bottom:24px;">Choose your colours. Your wallpaper updates instantly.</div>
+
+    <!-- Live preview -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Preview</div>
+      <div id="colourPreview" style="border-radius:14px;padding:16px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;background:#000000;border:1px solid #222;">
+        <div id="previewDot1" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot2" style="width:16px;height:16px;border-radius:50%;background:#f87171;"></div>
+        <div id="previewDot3" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot4" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
+        <div id="previewDot5" style="width:16px;height:16px;border-radius:50%;background:#f87171;"></div>
+        <div id="previewDot6" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
+        <div id="previewDot7" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot8" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
+      </div>
+    </div>
+
+    <!-- Background colour -->
+    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Background Colour</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
+      <input type="color" id="bgColorPicker" value="#000000"
+        oninput="setBg(this.value)"
+        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
+      <div>
+        <div style="font-size:15px;color:#fff;font-weight:500;">Background</div>
+        <div id="bgColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#000000</div>
+      </div>
+    </div>
+
+    <!-- Green dot colour -->
+    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Goal Complete Dot</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
+      <input type="color" id="greenColorPicker" value="#4ade80"
+        oninput="setGreenColor(this.value)"
+        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
+      <div>
+        <div style="font-size:15px;color:#fff;font-weight:500;">Green Day</div>
+        <div id="greenColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#4ade80</div>
+      </div>
+    </div>
+
+    <!-- Red dot colour -->
+    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Goal Missed Dot</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
+      <input type="color" id="redColorPicker" value="#f87171"
+        oninput="setRedColor(this.value)"
+        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
+      <div>
+        <div style="font-size:15px;color:#fff;font-weight:500;">Red Day</div>
+        <div id="redColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#f87171</div>
+      </div>
+    </div>
+
+    <!-- Reset to defaults -->
+    <button onclick="resetColours()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #222;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:12px;">
+      Reset to defaults
+    </button>
+
+    <button onclick="closeCustomise()" style="
+      width:100%;padding:15px;border-radius:16px;
+      border:none;background:#4ade80;color:#000;
+      font-family:'DM Sans',sans-serif;font-size:16px;
+      font-weight:700;cursor:pointer;">
+      Apply & Save
+    </button>
+  </div>
 </div>
 
 <div id="screen-confirm" class="screen">
@@ -298,7 +395,7 @@ window.addEventListener('load',()=>{
           const idx=getTodayIndex();
           state.todayLocked=state.dots[idx]!==null&&state.dots[idx]!==undefined;
           state.todayResult=state.dots[idx]||null;
-          renderHome();showScreen('home');
+          applyCustomColours();renderHome();showScreen('home');
         };
         btns.insertBefore(btn,btns.firstChild);
       }
@@ -429,11 +526,11 @@ function renderDotGrid(){
     const val=state.dots[i];
     if(i===todayIdx){
       dot.classList.add('today');
-      if(val==='green')dot.classList.add('green');
-      else if(val==='red')dot.classList.add('red');
+      if(val==='green'){dot.classList.add('green');dot.style.background=state.greenColor||'#4ade80';}
+      else if(val==='red'){dot.classList.add('red');dot.style.background=state.redColor||'#f87171';}
     } else {
-      if(val==='green')dot.classList.add('green');
-      else if(val==='red')dot.classList.add('red');
+      if(val==='green'){dot.classList.add('green');dot.style.background=state.greenColor||'#4ade80';}
+      else if(val==='red'){dot.classList.add('red');dot.style.background=state.redColor||'#f87171';}
     }
     // Only allow tapping EMPTY past days - locked days cannot be changed
     const isPast = i < todayIdx;
@@ -671,7 +768,7 @@ function generateWallpaper(){
   const ctx=canvas.getContext('2d');
   const W=1290,H=2796;
   canvas.width=W;canvas.height=H;
-  ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=state.bgColor||'#000000';ctx.fillRect(0,0,W,H);
   const cols=21,rows=18;
   const cellSize=(W*0.90)/cols;
   const gap=cellSize*0.25;
@@ -686,8 +783,10 @@ function generateWallpaper(){
     const cy=startY+row*cellSize+cellSize/2;
     ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);
     const val=state.dots[i];
-    if(val==='green')ctx.fillStyle='#4ade80';
-    else if(val==='red')ctx.fillStyle='#f87171';
+    const gColor=state.greenColor||'#4ade80';
+    const rColor=state.redColor||'#f87171';
+    if(val==='green')ctx.fillStyle=gColor;
+    else if(val==='red')ctx.fillStyle=rColor;
     else if(i===todayIdx)ctx.fillStyle='#3a3a3a';
     else ctx.fillStyle='#1a1a1a';
     ctx.fill();
@@ -794,6 +893,105 @@ function getShareableState(){
     dotsCompressed:compressDots(state.dots),
     startDate:state.startDate,
   };
+}
+
+// Customise functions
+function applyCustomColours(){
+  if(state.bgColor){
+    document.body.style.background=state.bgColor;
+  }
+}
+
+function showCustomise(){
+  document.getElementById('customiseModal').style.display='flex';
+  // Set pickers to current state values
+  const bgPicker=document.getElementById('bgColorPicker');
+  const greenPicker=document.getElementById('greenColorPicker');
+  const redPicker=document.getElementById('redColorPicker');
+  if(bgPicker) bgPicker.value=state.bgColor||'#000000';
+  if(greenPicker) greenPicker.value=state.greenColor||'#4ade80';
+  if(redPicker) redPicker.value=state.redColor||'#f87171';
+  document.getElementById('bgColorHex').textContent=state.bgColor||'#000000';
+  document.getElementById('greenColorHex').textContent=state.greenColor||'#4ade80';
+  document.getElementById('redColorHex').textContent=state.redColor||'#f87171';
+  updateColourPreview();
+}
+
+function closeCustomise(){
+  document.getElementById('customiseModal').style.display='none';
+  // Re-render dot grid and regenerate wallpaper with new colours
+  renderDotGrid();
+  renderHome();
+}
+
+function setBg(hex){
+  state.bgColor=hex;
+  applyCustomColours();
+  saveState();
+  updateColourPreview();
+  const hexEl=document.getElementById('bgColorHex');
+  if(hexEl) hexEl.textContent=hex;
+}
+
+function setGreenColor(hex){
+  state.greenColor=hex;
+  saveState();
+  renderDotGrid();
+  updateColourPreview();
+  const hexEl=document.getElementById('greenColorHex');
+  if(hexEl) hexEl.textContent=hex;
+}
+
+function setRedColor(hex){
+  state.redColor=hex;
+  saveState();
+  renderDotGrid();
+  updateColourPreview();
+  const hexEl=document.getElementById('redColorHex');
+  if(hexEl) hexEl.textContent=hex;
+}
+
+function setDots(greenHex, redHex){
+  state.greenColor='#'+greenHex;
+  state.redColor='#'+redHex;
+  saveState();
+  renderDotGrid();
+  updateColourPreview();
+}
+
+function updateColourPreview(){
+  const bg=state.bgColor||'#000000';
+  const green=state.greenColor||'#4ade80';
+  const red=state.redColor||'#f87171';
+  const preview=document.getElementById('colourPreview');
+  if(preview) preview.style.background=bg;
+  const greenDots=['previewDot1','previewDot3','previewDot7'];
+  const redDots=['previewDot2','previewDot5'];
+  greenDots.forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=green;});
+  redDots.forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=red;});
+}
+
+function resetColours(){
+  state.bgColor='#000000';
+  state.greenColor='#4ade80';
+  state.redColor='#f87171';
+  saveState();
+  applyCustomColours();
+  renderDotGrid();
+  updateColourPreview();
+  const bgPicker=document.getElementById('bgColorPicker');
+  const greenPicker=document.getElementById('greenColorPicker');
+  const redPicker=document.getElementById('redColorPicker');
+  if(bgPicker) bgPicker.value='#000000';
+  if(greenPicker) greenPicker.value='#4ade80';
+  if(redPicker) redPicker.value='#f87171';
+  document.getElementById('bgColorHex').textContent='#000000';
+  document.getElementById('greenColorHex').textContent='#4ade80';
+  document.getElementById('redColorHex').textContent='#f87171';
+}
+
+function updateSwatchUI(){
+  updateColourPreview();
 }
 
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
