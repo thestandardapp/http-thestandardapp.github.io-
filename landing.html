@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Standard — 365 Dots. No Excuses.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+
+:root {
+  --green: #4ade80;
+  --red: #f87171;
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --border: #1a1a1a;
+  --text: #ffffff;
+  --muted: #555;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(8,8,8,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text);
+}
+
+.nav-cta {
+  background: var(--green);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(74,222,128,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Animated dot grid background */
+.bg-dots {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  gap: 0;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.bg-dot {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-dot::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #333;
+  transition: background 0.5s;
+}
+
+.bg-dot.lit::after { background: var(--green); }
+.bg-dot.red-lit::after { background: var(--red); }
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.3s;
+}
+
+.hero-title {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(48px, 10vw, 96px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -2px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.5s;
+}
+
+.hero-title span { color: var(--green); }
+
+.hero-sub {
+  font-size: clamp(16px, 3vw, 20px);
+  color: #888;
+  max-width: 480px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.7s;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.9s;
+}
+
+.btn-green {
+  background: var(--green);
+  color: #000;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-green:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(74,222,128,0.2); }
+
+.btn-outline {
+  background: none;
+  color: #888;
+  border: 1px solid #2a2a2a;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-outline:hover { border-color: #444; color: #ccc; transform: translateY(-2px); }
+
+/* ── PHONE MOCKUP ── */
+.phone-section {
+  padding: 80px 24px;
+  display: flex;
+  justify-content: center;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.phone-frame {
+  width: 280px;
+  background: #0a0a0a;
+  border-radius: 44px;
+  border: 2px solid #1e1e1e;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px #000;
+  position: relative;
+}
+
+.phone-notch {
+  width: 100px;
+  height: 24px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto;
+}
+
+.phone-screen {
+  padding: 12px 16px 24px;
+}
+
+.phone-time {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+
+.phone-clock {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.phone-grid {
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  gap: 2.5px;
+}
+
+.phone-dot {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1a1a1a;
+}
+.phone-dot.g { background: var(--green); }
+.phone-dot.r { background: var(--red); }
+
+/* ── HOW IT WORKS ── */
+.section {
+  padding: 100px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 60px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  transition: border-color 0.2s;
+}
+.step:hover { border-color: #2a2a2a; }
+
+.step-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ── THE PHILOSOPHY ── */
+.philosophy {
+  padding: 100px 24px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.philosophy-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.big-quote {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(24px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+
+.big-quote .highlight { color: var(--green); }
+.big-quote .dim { color: #333; }
+
+.philosophy-body {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ── DOT DEMO ── */
+.dot-demo {
+  padding: 100px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  gap: 6px;
+  max-width: 480px;
+  margin: 0 auto 40px;
+}
+
+.demo-dot {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1a1a1a;
+  transition: background 0.3s ease;
+}
+.demo-dot.g { background: var(--green); }
+.demo-dot.r { background: var(--red); }
+
+/* ── SETUP SECTION ── */
+.setup {
+  padding: 100px 24px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.setup-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.setup-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.setup-step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.setup-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.setup-content { flex: 1; padding-top: 4px; }
+
+.setup-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.setup-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.setup-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--green);
+  text-decoration: none;
+  transition: all 0.2s;
+  word-break: break-all;
+}
+.setup-link:hover { background: #222; border-color: #333; }
+
+.copy-btn {
+  background: #222;
+  border: none;
+  color: #888;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.copy-btn:hover { color: #ccc; }
+
+/* ── CTA FOOTER ── */
+.cta-footer {
+  padding: 120px 24px;
+  text-align: center;
+}
+
+.cta-footer-title {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+.cta-footer-sub {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+
+.footer-bottom {
+  padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: #333;
+  letter-spacing: 0.05em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  nav { padding: 16px 20px; }
+  .section { padding: 60px 20px; }
+  .philosophy { padding: 60px 20px; }
+  .dot-demo { padding: 60px 20px; }
+  .setup { padding: 60px 20px; }
+  .cta-footer { padding: 80px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">THE STANDARD</div>
+  <a href="https://thestandardapp.github.io" class="nav-cta">Start My Year →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="bg-dots" id="bgDots"></div>
+
+  <div class="hero-eyebrow">365 days. One dot at a time.</div>
+  <h1 class="hero-title">Did you meet<br>your <span>standard</span><br>today?</h1>
+  <p class="hero-sub">Every day you have one question to answer. Your entire year stares back at you every time you pick up your phone.</p>
+  <div class="hero-btns">
+    <a href="https://thestandardapp.github.io" class="btn-green">Start My Year →</a>
+    <a href="#how-it-works" class="btn-outline">See How It Works</a>
+  </div>
+</section>
+
+<!-- PHONE MOCKUP -->
+<section class="phone-section">
+  <div class="phone-frame">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="phone-time">TUE 28 APR</div>
+      <div class="phone-clock">08:43</div>
+      <div class="phone-grid" id="phoneGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Simple enough<br>to actually use.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 — SET UP</div>
+      <div class="step-title">Set your standard</div>
+      <div class="step-desc">Add up to 5 daily goals. Exercise. No alcohol. Read 10 pages. Whatever your standard looks like.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02 — DAILY</div>
+      <div class="step-title">Tick your goals</div>
+      <div class="step-desc">Open the app each day. Tick off what you completed. Hit all your goals and you earn a green dot.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03 — LOCK IN</div>
+      <div class="step-title">Lock in the day</div>
+      <div class="step-desc">Tap Lock In The Day. One tap updates your lock screen wallpaper. Your year fills up dot by dot.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04 — FACE IT</div>
+      <div class="step-title">See your year</div>
+      <div class="step-desc">Every time you pick up your phone you see your entire year. No hiding from it. No excuses.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="philosophy-inner">
+    <div class="section-label">The philosophy</div>
+    <h2 class="big-quote">
+      <span class="dim">You either</span><br>
+      <span class="highlight">did it</span><br>
+      <span class="dim">or you didn't.</span>
+    </h2>
+    <p class="philosophy-body">Most habit apps bury you in graphs, streaks, and badges. The Standard asks one question every day. Complete your goals and get a green dot. Miss them and get a red dot. 365 dots. One year. Your lock screen holds you accountable so the app doesn't have to.</p>
+  </div>
+</section>
+
+<!-- DOT DEMO -->
+<section class="dot-demo">
+  <div class="section-label">Your year, visualised</div>
+  <h2 class="section-title" style="margin-bottom:40px">Every dot tells<br>the truth.</h2>
+  <div class="demo-grid" id="demoGrid"></div>
+  <p style="font-size:13px;color:#555;margin-top:16px;">🟢 Green = showed up &nbsp;&nbsp; 🔴 Red = missed &nbsp;&nbsp; ⚫ Empty = ahead of you</p>
+</section>
+
+<!-- SETUP -->
+<section class="setup" id="setup">
+  <div class="setup-inner">
+    <div class="section-label">Get started</div>
+    <h2 class="section-title" style="margin-bottom:48px">Up and running<br>in 5 minutes.</h2>
+
+    <div class="setup-step">
+      <div class="setup-num">1</div>
+      <div class="setup-content">
+        <div class="setup-title">Install the Shortcut</div>
+        <div class="setup-desc">This is what updates your lock screen wallpaper automatically. Install it first so it's ready when you need it.</div>
+        <a href="https://www.icloud.com/shortcuts/e60cb16d001b4c35a9599ceba0992cb8" class="setup-link">
+          ⚡ Install Shortcut
+        </a>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">2</div>
+      <div class="setup-content">
+        <div class="setup-title">Open the app in Safari</div>
+        <div class="setup-desc">Must be opened in Safari on iPhone for full functionality.</div>
+        <a href="https://thestandardapp.github.io" class="setup-link">
+          🟢 thestandardapp.github.io
+        </a>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">3</div>
+      <div class="setup-content">
+        <div class="setup-title">Add to Home Screen</div>
+        <div class="setup-desc">Tap the Share button in Safari → "Add to Home Screen" → "Add". The Standard now lives on your phone like a real app. Your dots are stored here — don't delete the icon.</div>
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <div class="setup-num">4</div>
+      <div class="setup-content">
+        <div class="setup-title">Set your goals and lock in</div>
+        <div class="setup-desc">Enter your name, add your goals, tap "Set My Standard". Then tick your goals each day and tap "Lock In The Day". Your wallpaper updates instantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FOOTER -->
+<section class="cta-footer">
+  <h2 class="cta-footer-title">Start dot<br><span style="color:var(--green)">number one.</span></h2>
+  <p class="cta-footer-sub">365 chances to show up. Today is one of them.</p>
+  <a href="https://thestandardapp.github.io" class="btn-green" style="font-size:18px;padding:20px 48px;">Start My Year →</a>
+</section>
+
+<div class="footer-bottom">
+  © 2026 The Standard — Set your standard. Meet it daily.
+</div>
+
+<script>
+// Generate background dot grid
+const bgDots = document.getElementById('bgDots');
+for (let i = 0; i < 500; i++) {
+  const d = document.createElement('div');
+  d.className = 'bg-dot';
+  bgDots.appendChild(d);
+}
+
+// Randomly light up background dots
+function animateBgDots() {
+  const dots = document.querySelectorAll('.bg-dot');
+  setInterval(() => {
+    const idx = Math.floor(Math.random() * dots.length);
+    const r = Math.random();
+    dots[idx].classList.remove('lit', 'red-lit');
+    if (r < 0.3) dots[idx].classList.add('lit');
+    else if (r < 0.4) dots[idx].classList.add('red-lit');
+  }, 80);
+}
+animateBgDots();
+
+// Generate phone mockup grid
+const phoneGrid = document.getElementById('phoneGrid');
+const phonePattern = [];
+for (let i = 0; i < 365; i++) {
+  if (i < 68) {
+    phonePattern.push(Math.random() < 0.42 ? 'g' : 'r');
+  } else {
+    phonePattern.push('');
+  }
+}
+phonePattern.forEach(p => {
+  const d = document.createElement('div');
+  d.className = 'phone-dot' + (p ? ' ' + p : '');
+  phoneGrid.appendChild(d);
+});
+
+// Generate demo grid
+const demoGrid = document.getElementById('demoGrid');
+const demoPattern = [];
+for (let i = 0; i < 365; i++) {
+  if (i < 118) {
+    demoPattern.push(Math.random() < 0.42 ? 'g' : 'r');
+  } else {
+    demoPattern.push('');
+  }
+}
+demoPattern.forEach(p => {
+  const d = document.createElement('div');
+  d.className = 'demo-dot' + (p ? ' ' + p : '');
+  demoGrid.appendChild(d);
+});
+
+// Copy buttons
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.step, .setup-step, .section-title, .big-quote').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
