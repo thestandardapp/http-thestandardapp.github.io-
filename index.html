@@ -117,13 +117,30 @@
   <div class="landing-title">THE STANDARD</div>
   <div class="landing-sub">Set your standard.<br>Meet it daily.<br>365 dots. No excuses.</div>
   <div class="landing-btns" id="landingBtns">
+    <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:16px;padding:16px 18px;text-align:left;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span>&#x26A0;&#xFE0F;</span>
+        <div style="font-size:11px;color:#4ade80;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">Step 1 - Do This First</div>
+      </div>
+      <div style="font-size:15px;color:#fff;font-weight:600;margin-bottom:6px;">Tap <span style="color:#4ade80">Share</span> &#x2192; <span style="color:#4ade80">Add to Home Screen</span></div>
+      <div style="font-size:13px;color:#666;line-height:1.5;">This app must live on your Home Screen to save wallpapers to your lock screen. Do this before you start.</div>
+    </div>
+    <!-- Step 2 - Install Shortcut -->
+    <div style="background:rgba(74,222,128,0.04);border:1px solid #1e1e1e;border-radius:16px;padding:16px 18px;text-align:left;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span>&#x26A1;</span>
+        <div style="font-size:11px;color:#4ade80;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">Step 2 - Install The Shortcut (One Time)</div>
+      </div>
+      <div style="font-size:13px;color:#666;line-height:1.5;margin-bottom:12px;">This updates your lock screen wallpaper automatically. Only needs to be done once.</div>
+      <a href="https://www.icloud.com/shortcuts/e60cb16d001b4c35a9599ceba0992cb8" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 16px;color:#4ade80;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;text-decoration:none;">
+        &#x26A1; Get the Shortcut &#x2192;
+      </a>
+    </div>
+
     <button class="btn-primary" onclick="showScreen('setup');initSetup()">Start My Year</button>
 
     <button onclick="resetAll()" style="background:none;border:none;color:#2a2a2a;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:8px;text-decoration:underline">Reset & Start Over</button>
-    <div style="margin-top:16px;padding:14px 16px;background:#111;border:1px solid #1e1e1e;border-radius:14px;text-align:left;">
-      <div style="font-size:11px;color:#4ade80;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600;">Pro tip</div>
-      <div style="font-size:13px;color:#666;line-height:1.6;">Tap <strong style="color:#aaa">Share</strong> → <strong style="color:#aaa">Add to Home Screen</strong> to save this app to your iPhone. Your dots are stored here — don't lose them!</div>
-    </div>
+
   </div>
 </div>
 
@@ -161,9 +178,15 @@
       <div class="home-date" id="homeDate"></div>
       <div class="home-title">THE STANDARD</div>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;align-items:center;">
       <button class="settings-btn" onclick="showScreen('share')">⤴ Share</button>
-      <button class="settings-btn" onclick="resetAll()" style="color:#444">↺</button>
+      <button onclick="showCustomise()" style="
+        width:36px;height:36px;border-radius:50%;
+        background:#111;border:1px solid #1e1e1e;
+        color:#666;font-size:18px;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        transition:all 0.2s;padding:0;"
+        title="Settings">⚙️</button>
     </div>
   </div>
   <div class="grid-card">
@@ -208,23 +231,13 @@
   </div>
   <div id="todayLockedBadge" style="display:none;text-align:center"></div>
 
-  <!-- Customise Button -->
-  <button onclick="showCustomise()" style="
-    width:100%;padding:13px;border-radius:14px;
-    border:1px solid #1e1e1e;background:#111;
-    color:#666;font-family:'DM Sans',sans-serif;
-    font-size:14px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:8px;">
-    🎨 Customise
-  </button>
-
   <!-- Regenerate Wallpaper Button — only shows when today is locked -->
   <button id="regenBtn" onclick="regenerateWallpaper()" style="
     display:none;width:100%;padding:13px;border-radius:14px;
     border:1px solid rgba(74,222,128,0.2);background:rgba(74,222,128,0.05);
     color:#4ade80;font-family:'DM Sans',sans-serif;
     font-size:14px;cursor:pointer;
-    display:none;align-items:center;justify-content:center;gap:8px;">
+    align-items:center;justify-content:center;gap:8px;">
     🔄 Update Wallpaper
   </button>
 </div>
@@ -288,8 +301,25 @@
     </div>
 
     <!-- Reset to defaults -->
-    <button onclick="resetColours()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #222;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:12px;">
+    <button onclick="resetColours()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #222;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:24px;">
       Reset to defaults
+    </button>
+
+    <!-- Divider -->
+    <div style="height:1px;background:#1e1e1e;margin-bottom:24px;"></div>
+
+    <!-- Target Dates -->
+    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Target Dates</div>
+    <div style="font-size:13px;color:#555;line-height:1.5;margin-bottom:14px;">Add up to 3 target dates — events, races, deadlines. They show as a special dot on your grid so you can see exactly how much time you have.</div>
+
+    <div id="targetDatesList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+
+    <button onclick="addTargetDate()" id="addTargetBtn" style="
+      width:100%;padding:12px;border-radius:12px;
+      border:1px dashed #2a2a2a;background:none;
+      color:#555;font-family:'DM Sans',sans-serif;
+      font-size:14px;cursor:pointer;">
+      + Add Target Date
     </button>
 
     <button onclick="closeCustomise()" style="
@@ -534,10 +564,19 @@ function renderDotGrid(){
     const dot=document.createElement('div');
     dot.className='dot';
     const val=state.dots[i];
+    // Check if this dot is a target date
+    const targets=state.targetDates||[];
+    const targetMatch=targets.find(t=>getTargetDotIndex(t.date)===i);
+
     if(i===todayIdx){
       dot.classList.add('today');
       if(val==='green'){dot.classList.add('green');dot.style.background=state.greenColor||'#4ade80';}
       else if(val==='red'){dot.classList.add('red');dot.style.background=state.redColor||'#f87171';}
+    } else if(targetMatch && !val){
+      // Target date dot - lighter grey, subtly different from empty dots
+      dot.style.background='#3a3a3a';
+      dot.style.transform='scale(1.05)';
+      dot.title=targetMatch.label||'Target';
     } else {
       if(val==='green'){dot.classList.add('green');dot.style.background=state.greenColor||'#4ade80';}
       else if(val==='red'){dot.classList.add('red');dot.style.background=state.redColor||'#f87171';}
@@ -798,11 +837,18 @@ function generateWallpaper(){
     const val=state.dots[i];
     const gColor=state.greenColor||'#4ade80';
     const rColor=state.redColor||'#f87171';
-    if(val==='green')ctx.fillStyle=gColor;
-    else if(val==='red')ctx.fillStyle=rColor;
-    else if(i===todayIdx)ctx.fillStyle='#3a3a3a';
-    else ctx.fillStyle='#1a1a1a';
-    ctx.fill();
+    const targets2=state.targetDates||[];
+    const targetMatch2=targets2.find(t=>getTargetDotIndex(t.date)===i);
+
+    if(val==='green'){ctx.fillStyle=gColor;ctx.fill();}
+    else if(val==='red'){ctx.fillStyle=rColor;ctx.fill();}
+    else if(i===todayIdx){ctx.fillStyle='#3a3a3a';ctx.fill();}
+    else if(targetMatch2){
+      // Target date - lighter grey than empty dots
+      ctx.fillStyle='#3a3a3a';
+      ctx.fill();
+    }
+    else{ctx.fillStyle='#1a1a1a';ctx.fill();}
   }
 
   // Draw stats row below the incomplete last row
@@ -935,6 +981,69 @@ function regenerateWallpaper(){
   showScreen('confirm');
 }
 
+// ══ TARGET DATES ══
+function addTargetDate(){
+  if(!state.targetDates) state.targetDates=[];
+  if(state.targetDates.length>=3) return;
+  state.targetDates.push({label:'',date:'',color:'#ffffff'});
+  saveState();
+  renderTargetDates();
+}
+
+function removeTargetDate(idx){
+  state.targetDates.splice(idx,1);
+  saveState();
+  renderTargetDates();
+  renderDotGrid();
+}
+
+function updateTargetDate(idx,field,val){
+  if(!state.targetDates) state.targetDates=[];
+  state.targetDates[idx][field]=val;
+  saveState();
+  renderDotGrid();
+}
+
+function renderTargetDates(){
+  if(!state.targetDates) state.targetDates=[];
+  const list=document.getElementById('targetDatesList');
+  if(!list) return;
+  list.innerHTML='';
+  state.targetDates.forEach((t,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:14px;';
+    row.innerHTML=`
+      <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+        <input type="color" value="${t.color||'#ffffff'}"
+          oninput="updateTargetDate(${i},'color',this.value)"
+          style="width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;padding:0;background:none;flex-shrink:0;">
+        <input placeholder="Event name (e.g. Cape Town Marathon)"
+          value="${t.label||''}"
+          oninput="updateTargetDate(${i},'label',this.value)"
+          style="flex:1;background:none;border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;">
+        <button onclick="removeTargetDate(${i})" style="background:none;border:none;color:#444;cursor:pointer;font-size:16px;padding:2px 6px;">×</button>
+      </div>
+      <input type="date" value="${t.date||''}"
+        oninput="updateTargetDate(${i},'date',this.value)"
+        style="width:100%;background:#111;border:1px solid #2a2a2a;border-radius:8px;color:#888;font-family:'DM Sans',sans-serif;font-size:14px;padding:8px 10px;outline:none;">
+    `;
+    list.appendChild(row);
+  });
+  // Hide add button if 3 already
+  const addBtn=document.getElementById('addTargetBtn');
+  if(addBtn) addBtn.style.display=state.targetDates.length>=3?'none':'block';
+}
+
+function getTargetDotIndex(dateStr){
+  if(!dateStr) return -1;
+  const start=new Date(state.startDate||todayStr());
+  start.setHours(0,0,0,0);
+  const target=new Date(dateStr);
+  target.setHours(0,0,0,0);
+  const diff=Math.floor((target-start)/(1000*60*60*24));
+  return diff>=0&&diff<=364?diff:-1;
+}
+
 function applyCustomColours(){
   if(state.bgColor){
     document.body.style.background=state.bgColor;
@@ -954,6 +1063,7 @@ function showCustomise(){
   document.getElementById('greenColorHex').textContent=state.greenColor||'#4ade80';
   document.getElementById('redColorHex').textContent=state.redColor||'#f87171';
   updateColourPreview();
+  renderTargetDates();
 }
 
 function closeCustomise(){
