@@ -243,92 +243,119 @@
 </div>
 
 <!-- Customise Modal -->
-<div id="customiseModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:flex-end;justify-content:center;">
-  <div style="background:#111;border:1px solid #222;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:420px;">
+<div id="customiseModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:flex-end;justify-content:center;overflow-y:auto;">
+  <div style="background:#111;border:1px solid #222;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:420px;">
 
-    <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">Customise</div>
-    <div style="font-size:13px;color:#555;margin-bottom:24px;">Choose your colours. Your wallpaper updates instantly.</div>
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#fff;">Settings</div>
+      <button onclick="closeCustomise()" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1px solid #2a2a2a;color:#666;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+    </div>
+    <div style="font-size:13px;color:#555;margin-bottom:20px;">Customise your experience</div>
 
-    <!-- Live preview -->
-    <div style="margin-bottom:20px;">
+    <!-- Tabs -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px;">
+      <button id="tab-look" onclick="switchTab('look')" style="padding:12px 8px;border-radius:12px;border:1px solid #4ade80;background:rgba(74,222,128,0.12);color:#4ade80;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:18px;">&#x1F3A8;</span>Look
+      </button>
+      <button id="tab-targets" onclick="switchTab('targets')" style="padding:12px 8px;border-radius:12px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:18px;">&#x1F3AF;</span>Targets
+      </button>
+      <button id="tab-remind" onclick="switchTab('remind')" style="padding:12px 8px;border-radius:12px;border:1px solid #2a2a2a;background:#1a1a1a;color:#666;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:18px;">&#x1F514;</span>Remind
+      </button>
+    </div>
+
+    <!-- TAB: LOOK -->
+    <div id="tabContent-look">
+      <!-- Preview -->
       <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Preview</div>
-      <div id="colourPreview" style="border-radius:14px;padding:16px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;background:#000000;border:1px solid #222;">
-        <div id="previewDot1" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
-        <div id="previewDot2" style="width:16px;height:16px;border-radius:50%;background:#f87171;"></div>
-        <div id="previewDot3" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
-        <div id="previewDot4" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
-        <div id="previewDot5" style="width:16px;height:16px;border-radius:50%;background:#f87171;"></div>
-        <div id="previewDot6" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
-        <div id="previewDot7" style="width:16px;height:16px;border-radius:50%;background:#4ade80;"></div>
-        <div id="previewDot8" style="width:16px;height:16px;border-radius:50%;background:#1a1a1a;"></div>
+      <div id="colourPreview" style="border-radius:14px;padding:20px;display:flex;justify-content:center;align-items:center;gap:8px;background:#000000;border:1px solid #222;margin-bottom:20px;">
+        <div id="previewDot1" style="width:24px;height:24px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot2" style="width:24px;height:24px;border-radius:50%;background:#f87171;"></div>
+        <div id="previewDot3" style="width:24px;height:24px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot4" style="width:24px;height:24px;border-radius:50%;background:#1a1a1a;"></div>
+        <div id="previewDot5" style="width:24px;height:24px;border-radius:50%;background:#f87171;"></div>
+        <div id="previewDot6" style="width:24px;height:24px;border-radius:50%;background:#1a1a1a;"></div>
+        <div id="previewDot7" style="width:24px;height:24px;border-radius:50%;background:#4ade80;"></div>
+        <div id="previewDot8" style="width:24px;height:24px;border-radius:50%;background:#1a1a1a;"></div>
+      </div>
+
+      <!-- Colours label -->
+      <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Colours</div>
+
+      <!-- Background row -->
+      <label style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;margin-bottom:8px;cursor:pointer;">
+        <div id="bgDotPreview" style="width:28px;height:28px;border-radius:50%;background:#555;border:2px solid #333;flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:15px;color:#fff;font-weight:500;">Background</div>
+          <div id="bgColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#000000</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="color" id="bgColorPicker" value="#000000" oninput="setBg(this.value)" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;background:none;">
+          <span style="color:#444;font-size:14px;">&#x276F;</span>
+        </div>
+      </label>
+
+      <!-- Green dot row -->
+      <label style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;margin-bottom:8px;cursor:pointer;">
+        <div id="greenDotPreview" style="width:28px;height:28px;border-radius:50%;background:#4ade80;flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:15px;color:#fff;font-weight:500;">Goal Complete</div>
+          <div id="greenColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#4ade80</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="color" id="greenColorPicker" value="#4ade80" oninput="setGreenColor(this.value)" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;background:none;">
+          <span style="color:#444;font-size:14px;">&#x276F;</span>
+        </div>
+      </label>
+
+      <!-- Red dot row -->
+      <label style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;margin-bottom:20px;cursor:pointer;">
+        <div id="redDotPreview" style="width:28px;height:28px;border-radius:50%;background:#f87171;flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:15px;color:#fff;font-weight:500;">Goal Missed</div>
+          <div id="redColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#f87171</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="color" id="redColorPicker" value="#f87171" oninput="setRedColor(this.value)" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;background:none;">
+          <span style="color:#444;font-size:14px;">&#x276F;</span>
+        </div>
+      </label>
+
+      <button onclick="resetColours()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #222;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Reset to defaults</button>
+    </div>
+
+    <!-- TAB: TARGETS -->
+    <div id="tabContent-targets" style="display:none;">
+      <div style="font-size:13px;color:#555;line-height:1.5;margin-bottom:16px;">Add up to 3 target dates. They show as a lighter dot on your grid.</div>
+      <div id="targetDatesList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <button onclick="addTargetDate()" id="addTargetBtn" style="width:100%;padding:12px;border-radius:12px;border:1px dashed #2a2a2a;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;">+ Add Target Date</button>
+    </div>
+
+    <!-- TAB: REMIND -->
+    <div id="tabContent-remind" style="display:none;">
+      <div style="font-size:13px;color:#555;line-height:1.5;margin-bottom:16px;">Get a daily nudge to lock in your day.</div>
+      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="font-size:15px;color:#fff;font-weight:500;">Remind me daily</div>
+          <div onclick="toggleReminder()" id="reminderToggle" style="width:44px;height:26px;border-radius:13px;background:#2a2a2a;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
+            <div id="reminderThumb" style="width:20px;height:20px;border-radius:50%;background:#555;position:absolute;top:3px;left:3px;transition:all 0.2s;"></div>
+          </div>
+        </div>
+        <div id="reminderTimeRow" style="display:none;align-items:center;gap:12px;">
+          <div style="font-size:14px;color:#888;">Remind me at</div>
+          <input type="time" id="reminderTime" value="21:00" onchange="setReminderTime(this.value)" style="background:#111;border:1px solid #2a2a2a;border-radius:8px;color:#4ade80;font-family:monospace;font-size:16px;padding:8px 12px;outline:none;cursor:pointer;flex:1;">
+        </div>
+        <div id="reminderStatus" style="font-size:12px;color:#555;margin-top:8px;"></div>
       </div>
     </div>
 
-    <!-- Background colour -->
-    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Background Colour</div>
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
-      <input type="color" id="bgColorPicker" value="#000000"
-        oninput="setBg(this.value)"
-        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
-      <div>
-        <div style="font-size:15px;color:#fff;font-weight:500;">Background</div>
-        <div id="bgColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#000000</div>
-      </div>
+    <div style="margin-top:24px;">
+      <button onclick="closeCustomise()" style="width:100%;padding:15px;border-radius:16px;border:none;background:#4ade80;color:#000;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;">
+        Apply &amp; Save
+      </button>
     </div>
-
-    <!-- Green dot colour -->
-    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Goal Complete Dot</div>
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
-      <input type="color" id="greenColorPicker" value="#4ade80"
-        oninput="setGreenColor(this.value)"
-        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
-      <div>
-        <div style="font-size:15px;color:#fff;font-weight:500;">Green Day</div>
-        <div id="greenColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#4ade80</div>
-      </div>
-    </div>
-
-    <!-- Red dot colour -->
-    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Goal Missed Dot</div>
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;background:#1a1a1a;border-radius:14px;padding:14px 16px;border:1px solid #222;">
-      <input type="color" id="redColorPicker" value="#f87171"
-        oninput="setRedColor(this.value)"
-        style="width:44px;height:44px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;">
-      <div>
-        <div style="font-size:15px;color:#fff;font-weight:500;">Red Day</div>
-        <div id="redColorHex" style="font-size:12px;color:#555;font-family:'Space Mono',monospace;">#f87171</div>
-      </div>
-    </div>
-
-    <!-- Reset to defaults -->
-    <button onclick="resetColours()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #222;background:none;color:#555;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:24px;">
-      Reset to defaults
-    </button>
-
-    <!-- Divider -->
-    <div style="height:1px;background:#1e1e1e;margin-bottom:24px;"></div>
-
-    <!-- Target Dates -->
-    <div style="font-size:11px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Target Dates</div>
-    <div style="font-size:13px;color:#555;line-height:1.5;margin-bottom:14px;">Add up to 3 target dates — events, races, deadlines. They show as a special dot on your grid so you can see exactly how much time you have.</div>
-
-    <div id="targetDatesList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
-
-    <button onclick="addTargetDate()" id="addTargetBtn" style="
-      width:100%;padding:12px;border-radius:12px;
-      border:1px dashed #2a2a2a;background:none;
-      color:#555;font-family:'DM Sans',sans-serif;
-      font-size:14px;cursor:pointer;">
-      + Add Target Date
-    </button>
-
-    <button onclick="closeCustomise()" style="
-      width:100%;padding:15px;border-radius:16px;
-      border:none;background:#4ade80;color:#000;
-      font-family:'DM Sans',sans-serif;font-size:16px;
-      font-weight:700;cursor:pointer;">
-      Apply & Save
-    </button>
   </div>
 </div>
 
@@ -377,6 +404,20 @@
   </div>
   <div class="info-box"><strong>Your data is safe.</strong> Everything is stored on your phone. Nobody can see your dots unless you share your link.</div>
   <button class="btn-secondary" onclick="showScreen('home')">← Back</button>
+</div>
+
+<!-- Demo Edit Popup - full colour control for content creation -->
+<div id="demoEditPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:24px;width:300px;text-align:center;">
+    <div style="font-size:11px;color:#4ade80;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Demo Mode</div>
+    <div id="demoEditDay" style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+      <button onclick="setDemoColor('green')" style="padding:12px 6px;border-radius:12px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.15);color:#4ade80;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Green</button>
+      <button onclick="setDemoColor('red')" style="padding:12px 6px;border-radius:12px;border:1px solid rgba(248,113,113,0.3);background:rgba(248,113,113,0.15);color:#f87171;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Red</button>
+      <button onclick="setDemoColor(null)" style="padding:12px 6px;border-radius:12px;border:1px solid #333;background:#111;color:#666;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Empty</button>
+    </div>
+    <button onclick="closeDemoEditPopup()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #2a2a2a;background:none;color:#666;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;">Cancel</button>
+  </div>
 </div>
 
 <!-- Edit Day Popup -->
@@ -442,6 +483,20 @@ window.addEventListener('load',()=>{
     }catch(e){}
   }
   showScreen('landing');
+  if(state&&state.reminderOn)scheduleReminder();
+
+  // Register service worker for reliable background notifications
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js').then(reg=>{
+      console.log('Service worker registered');
+      // Listen for reschedule messages
+      navigator.serviceWorker.addEventListener('message', event=>{
+        if(event.data&&event.data.type==='RESCHEDULE'&&state.reminderOn){
+          scheduleReminder();
+        }
+      });
+    }).catch(err=>console.log('SW registration failed:',err));
+  }
 });
 
 function animateLandingDots(){
@@ -529,6 +584,11 @@ function finishSetup(){
     if(!state.startDate) state.startDate=todayStr();
   }
   saveState();renderHome();showScreen('home');
+}
+
+// Demo mode - special name unlocks full dot editing for content creation
+function isDemoMode(){
+  return state.name&&state.name.toLowerCase()==='beto';
 }
 
 function loadChadHistory(){
@@ -1112,6 +1172,7 @@ function setDots(greenHex, redHex){
   saveState();
   renderDotGrid();
   updateColourPreview();
+  initReminderUI();
 }
 
 function updateColourPreview(){
@@ -1147,6 +1208,126 @@ function resetColours(){
 
 function updateSwatchUI(){
   updateColourPreview();
+}
+
+// DAILY REMINDER
+function switchTab(tab){
+  ['look','targets','remind'].forEach(t=>{
+    const content=document.getElementById('tabContent-'+t);
+    const btn=document.getElementById('tab-'+t);
+    if(t===tab){
+      if(content)content.style.display='block';
+      if(btn){btn.style.borderColor='#4ade80';btn.style.background='rgba(74,222,128,0.12)';btn.style.color='#4ade80';}
+    } else {
+      if(content)content.style.display='none';
+      if(btn){btn.style.borderColor='#2a2a2a';btn.style.background='#1a1a1a';btn.style.color='#666';}
+    }
+  });
+  if(tab==='targets')renderTargetDates();
+  if(tab==='remind')initReminderUI();
+}
+
+function initReminderUI(){
+  const on=state.reminderOn||false;
+  const time=state.reminderTime||'21:00';
+  const toggle=document.getElementById('reminderToggle');
+  const thumb=document.getElementById('reminderThumb');
+  const timeRow=document.getElementById('reminderTimeRow');
+  const timeInput=document.getElementById('reminderTime');
+  const status=document.getElementById('reminderStatus');
+  if(toggle)toggle.style.background=on?'#4ade80':'#2a2a2a';
+  if(thumb){thumb.style.left=on?'21px':'3px';thumb.style.background=on?'#000':'#555';}
+  if(timeRow)timeRow.style.display=on?'flex':'none';
+  if(timeInput)timeInput.value=time;
+  if(status)status.textContent=on?'Reminder set for '+time+' daily':'';
+}
+
+function toggleReminder(){
+  if(!state.reminderOn){
+    if(!('Notification' in window)){alert('Notifications not supported on this device.');return;}
+    Notification.requestPermission().then(perm=>{
+      if(perm==='granted'){
+        state.reminderOn=true;saveState();scheduleReminder();initReminderUI();
+      } else {
+        document.getElementById('reminderStatus').textContent='Please allow notifications in your browser settings.';
+      }
+    });
+  } else {
+    state.reminderOn=false;saveState();initReminderUI();
+  }
+}
+
+function setReminderTime(val){
+  state.reminderTime=val;saveState();
+  if(state.reminderOn)scheduleReminder();
+  document.getElementById('reminderStatus').textContent='Reminder set for '+val+' daily';
+}
+
+function scheduleReminder(){
+  if(!state.reminderOn)return;
+  const time=state.reminderTime||'21:00';
+  const [hours,minutes]=time.split(':').map(Number);
+  const now=new Date();const next=new Date();
+  next.setHours(hours,minutes,0,0);
+  if(next<=now)next.setDate(next.getDate()+1);
+  const msUntil=next-now;
+
+  // Try service worker first for reliable background notifications
+  if('serviceWorker' in navigator&&navigator.serviceWorker.controller){
+    navigator.serviceWorker.controller.postMessage({
+      type:'SCHEDULE_NOTIFICATION',
+      time:time,
+      msUntil:msUntil
+    });
+    console.log('Reminder scheduled via service worker for '+time);
+  }
+
+  // Also set a fallback in-page timer
+  clearTimeout(window._reminderTimer);
+  window._reminderTimer=setTimeout(function fireReminder(){
+    const todayIdx=getTodayIndex();
+    const locked=state.dots[todayIdx]!==null&&state.dots[todayIdx]!==undefined;
+    if(!locked&&state.reminderOn&&Notification.permission==='granted'){
+      new Notification('The Standard',{
+        body:'Have you met your standard today?',
+        icon:'/icon-192.png',
+        tag:'daily-reminder'
+      });
+    }
+    if(state.reminderOn){
+      window._reminderTimer=setTimeout(fireReminder,24*60*60*1000);
+    }
+  },msUntil);
+}
+
+// Demo mode popup functions
+let _demoEditIdx=null;
+
+function openDemoEditPopup(idx){
+  const start=new Date(state.startDate||todayStr());start.setHours(0,0,0,0);
+  const dotDate=new Date(start.getTime()+idx*24*60*60*1000);
+  const dateStr=dotDate.toLocaleDateString('en-ZA',{day:'numeric',month:'long'});
+  _demoEditIdx=idx;
+  document.getElementById('demoEditDay').textContent='Day '+(idx+1)+' - '+dateStr;
+  document.getElementById('demoEditPopup').style.display='flex';
+}
+
+function setDemoColor(color){
+  if(_demoEditIdx===null)return;
+  state.dots[_demoEditIdx]=color;
+  // If editing today update lock state too
+  const todayIdx=getTodayIndex();
+  if(_demoEditIdx===todayIdx){
+    state.todayLocked=color!==null;
+    state.todayResult=color;
+  }
+  saveState();renderDotGrid();renderStats();renderLockBtn();
+  closeDemoEditPopup();
+}
+
+function closeDemoEditPopup(){
+  document.getElementById('demoEditPopup').style.display='none';
+  _demoEditIdx=null;
 }
 
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
